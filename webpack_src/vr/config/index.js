@@ -49,8 +49,8 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/wpvr/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist/wpvr'),
-    assetsSubDirectory: 'static',
+    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsSubDirectory: 'wpvr',
     assetsPublicPath: '/static/',
 
     /**

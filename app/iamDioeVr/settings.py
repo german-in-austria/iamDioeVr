@@ -154,18 +154,11 @@ if 'IAMDIOEVR_STATIC_URL' in os.environ and os.environ['IAMDIOEVR_STATIC_URL']:
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'iamDioeVr', 'static'),
 	os.path.join(BASE_DIR, 'vr', 'static'),
+	os.path.abspath(os.path.join(BASE_DIR, os.pardir, 'webpack_src', 'vr', 'dist')),
 )
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'dist'),
-#     os.path.join(BASE_DIR, 'static'),
-# )
-# STATIC_ROOT = os.path.join(BASE_DIR, 'public')
-# STATIC_URL = '/static/'
-
-# WEBPACK_LOADER = {
-#     'DEFAULT': {
-#         'BUNDLE_DIR_NAME': '',
-#         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-#     }
-# }
+WEBPACK_LOADER = {
+	'VR': {
+		'STATS_FILE': os.path.abspath(os.path.join(BASE_DIR, os.pardir, 'webpack_src', 'vr', 'webpack-stats.json')),
+	}
+}
