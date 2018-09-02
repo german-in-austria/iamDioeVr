@@ -1,4 +1,4 @@
-## DIÖ DB
+## I am DiÖ Varietäten raten
 
 ### 1. Start a PostgreSQL container
 like this:
@@ -6,7 +6,7 @@ like this:
 
 Use ` -p 5432:5432` to expose a port for easy access through a GUI like pgAdmin.
 
-### 2. Start the DIÖ DB App with a container-link and an exposed port
+### 2. Start the "I am DiÖ Varietäten raten" App with a container-link and an exposed port
 `docker run -p 3333:80 --env-file=.env --link my-postgres:postgres dioe/iamdioe-vr:stage`
 
 ### 3. Setup the App/Database

@@ -19,10 +19,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #####################################################################################################################
 # Umgebungsvariablen:																								#
 #####################################################################################################################
-# IAMDIOEVR_DEBUG = "False"									(Default: "True")										#
+# IAMDIOEVR_DEBUG = "False"										(Default: "True")									#
 # IAMDIOEVR_SECRET_KEY = Benutze: https://www.miniwebtool.com/django-secret-key-generator/							#
 # IAMDIOEVR_STATIC_ROOT = "/var/www/example.com/static/"		(Default: None)										#
-# IAMDIOEVR_STATIC_URL = "/static/"							(Default: "/static/")									#
+# IAMDIOEVR_STATIC_URL = "/static/"								(Default: "/static/")								#
 # Datenbank:																										#
 # IAMDIOEVR_DB="django.db.backends.postgresql"					(Default: "django.db.backends.sqlite3")				#
 # IAMDIOEVR_DB_NAME="PersonenDB"								(Default: os.path.join(BASE_DIR, 'db.sqlite3'))		#
@@ -32,16 +32,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # IAMDIOEVR_DB_PORT="5433"										(Default: None)										#
 #####################################################################################################################
 
-LOGIN_URL = 'iamdioevr_login'
-LOGOUT_URL = 'iamdioevr_logout'
-LOGIN_REDIRECT_URL = 'Startseite:start'
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5@l-y9u7y_7plh(7xq2u-_ilgushpm*&^7&j0%6o-(b0&d31bj'
+SECRET_KEY = 'yueqlcc54o8+eskilg2=n=#n^i)8o@z_fi7j@$le61xi%2u75z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if 'IAMDIOEVR_DEBUG' in os.environ and (os.environ['IAMDIOEVR_DEBUG'] == 'False' or os.environ['IAMDIOEVR_DEBUG'] is False):
@@ -87,7 +82,7 @@ ROOT_URLCONF = 'iamDioeVr.urls'
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		# 'DIRS': [os.path.join(BASE_DIR, 'iamDioeVr', 'templates'), os.path.join(BASE_DIR, 'Startseite', 'templates'), os.path.join(BASE_DIR, 'DB', 'templates'), os.path.join(BASE_DIR, 'KorpusDB', 'templates')],
+		'DIRS': [os.path.join(BASE_DIR, 'iamDioeVr', 'templates'), os.path.join(BASE_DIR, 'vr', 'templates')],
 		'APP_DIRS': True,
 		'OPTIONS': {
 			'context_processors': [
@@ -156,5 +151,6 @@ if 'IAMDIOEVR_STATIC_URL' in os.environ and os.environ['IAMDIOEVR_STATIC_URL']:
 	STATIC_URL = os.environ['IAMDIOEVR_STATIC_URL']
 
 STATICFILES_DIRS = (
-	# os.path.join(BASE_DIR, 'iamDioeVr', 'static'),
+	os.path.join(BASE_DIR, 'iamDioeVr', 'static'),
+	os.path.join(BASE_DIR, 'vr', 'static'),
 )
