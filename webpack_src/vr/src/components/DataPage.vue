@@ -111,7 +111,7 @@
 		</div>
 
 		<div class="alert alert-primary mt-3" role="alert">
-			<h4 class="text-center">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h4>
+			<h5 class="text-center">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h5>
 		</div>
 		<div class="form-group form-check">
 			<input v-model="daten.dsgvo" type="checkbox" class="form-check-input" id="dsgvoCheck">

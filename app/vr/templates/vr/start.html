@@ -13,5 +13,7 @@
 	<script>
 		var csrf='{{ csrf_token }}';
 	</script>
+	{% render_bundle 'manifest' 'js' 'VR' %}
+	{% render_bundle 'vendor' 'js' 'VR' %}
 	{% render_bundle 'app' 'js' 'VR' %}
 {% endblock %}

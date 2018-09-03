@@ -43,7 +43,7 @@
 
 <style>
 	.content {
-		padding-bottom: 100px;
+		padding-bottom: 50px;
 		padding-top: 20px;
 	}
 </style>
