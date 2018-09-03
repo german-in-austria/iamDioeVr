@@ -4,8 +4,20 @@ from django.utils.module_loading import import_module
 from django import template
 from operator import itemgetter
 import json
+from webpack_loader import utils
+from webpack_loader.exceptions import WebpackBundleLookupError
+from django.utils.safestring import mark_safe
 
 register = template.Library()
+
+
+@register.simple_tag
+def render_bundle(bundle_name, extension=None, config='DEFAULT', attrs=''):
+	try:
+		tags = utils.get_as_tags(bundle_name, extension=extension, config=config, attrs=attrs)
+	except WebpackBundleLookupError as e:
+		return''
+	return mark_safe('\n'.join(tags))
 
 
 @register.filter(name='toJson')
