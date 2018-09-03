@@ -8,12 +8,12 @@
 
 		<div class="form-row">
 			<div class="form-group col-sm-4 col-md-2">
-				<label for="inputGeburtsjahr">Geburtsjahr</label>
-				<input v-model="daten.geburtsjahr" type="number" class="form-control" id="inputGeburtsjahr" placeholder="Geburtsjahr">
+				<label for="inputGeburtsjahr">Geburtsjahr *</label>
+				<input v-model="daten.geburtsjahr" type="number" min="1890" max="2020" :class="'form-control' + ((error.geburtsjahr.error) ? ' is-invalid' : ' is-valid')" id="inputGeburtsjahr" placeholder="Geburtsjahr">
 			</div>
 			<div class="form-group col-sm-8 col-md-4">
-				<label>biologisches Geschlecht</label>
-				<div class="form-control">
+				<label>biologisches Geschlecht *</label>
+				<div :class="'form-control' + ((error.bioGesch.error) ? ' is-invalid' : ' is-valid')">
 					<div class="form-check form-check-inline" v-for="aCheck in [{val: 1, title: 'männlich', id: 'srman'}, {val: 2, title: 'weiblich', id: 'srwoman'}, {val: 3, title: 'sonstiges', id: 'srsonst'}]">
 						<input v-model="daten.bioGesch" class="form-check-input" type="radio" name="inputBioGesch" :id="aCheck.id" :value="aCheck.val">
 						<label class="form-check-label" :for="aCheck.id">{{ aCheck.title }}</label>
@@ -21,17 +21,17 @@
 				</div>
 			</div>
 			<div class="form-group col-md-6">
-				<label for="inputBeruf">Beruf</label>
-				<input v-model="daten.beruf" type="text" class="form-control" id="inputBeruf" placeholder="Beruf">
+				<label for="inputBeruf">Beruf *</label>
+				<input v-model="daten.beruf" type="text" :class="'form-control' + ((error.beruf.error) ? ' is-invalid' : ' is-valid')" id="inputBeruf" placeholder="Beruf">
 			</div>
 		</div>
 		<div class="form-row">
-			<Wohnort v-model="daten.wohnort" class="col-md-6" label="Aktueller Wohnort (inkl. Postleitzahl)"/>
-			<Wohnort v-model="daten.wohnortLeben" class="col-md-6" label="Wo haben Sie den Großteil Ihres Lebens verbracht? (inkl. Postleitzahl)"/>
+			<Wohnort v-model="daten.wohnort" :class="'col-md-6' + ((error.wohnort.error) ? ' is-invalid' : ' is-valid')" label="Aktueller Wohnort (inkl. Postleitzahl) *"/>
+			<Wohnort v-model="daten.wohnortLeben" :class="'col-md-6' + ((error.wohnortLeben.error) ? ' is-invalid' : ' is-valid')" label="Wo haben Sie den Großteil Ihres Lebens verbracht? (inkl. Postleitzahl) *"/>
 		</div>
 		<div class="form-group">
-			<label for="inputSprachenDialekte">Mit welchen Sprachen / Dialekten sind Sie aufgewachsen?</label>
-			<input v-model="daten.sprachenDialekte" type="text" class="form-control" id="inputSprachenDialekte" placeholder="Sprachen, Dialekte">
+			<label for="inputSprachenDialekte">Mit welchen Sprachen / Dialekten sind Sie aufgewachsen? *</label>
+			<input v-model="daten.sprachenDialekte" type="text" :class="'form-control' + ((error.sprachenDialekte.error) ? ' is-invalid' : ' is-valid')" id="inputSprachenDialekte" placeholder="Sprachen, Dialekte">
 		</div>
 
 		<div class="alert alert-success" role="alert">
@@ -46,13 +46,13 @@
 			<br>
 			<p><b>Wo sind Ihre Eltern aufgewachsen?</b></p>
 			<div class="form-row">
-				<Wohnort v-model="daten.wohnortVater" class="col-md-6" label="Wohnort Vater (inkl. Postleitzahl)"/>
-				<Wohnort v-model="daten.wohnortMutter" class="col-md-6" label="Wohnort Mutter (inkl. Postleitzahl)"/>
+				<Wohnort v-model="daten.wohnortVater" :class="'col-md-6' + ((error.wohnortVater.empty) ? ' is-empty' : '')" label="Wohnort Vater (inkl. Postleitzahl)"/>
+				<Wohnort v-model="daten.wohnortMutter" :class="'col-md-6' + ((error.wohnortMutter.empty) ? ' is-empty' : '')" label="Wohnort Mutter (inkl. Postleitzahl)"/>
 			</div>
-			<RadioFromTo v-model="daten.sprachlichErzogenVater" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
-			<RadioFromTo v-model="daten.sprachlichErzogenMutter" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
+			<RadioFromTo v-model="daten.sprachlichErzogenVater" :class="((error.sprachlichErzogenVater.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
+			<RadioFromTo v-model="daten.sprachlichErzogenMutter" :class="((error.sprachlichErzogenMutter.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
 			<div class="form-row">
-				<div class="form-group col-md-3">
+				<div :class="'form-group col-md-3' + ((error.dialektSelbst.empty) ? ' is-empty' : '')">
 					<label>Beherrschen Sie selbst einen Dialekt?</label>
 					<div class="form-control">
 						<div class="form-check form-check-inline" v-for="aCheck in [{val: 'Ja', title: 'Ja', id: 'inputDialektSelbstJa'}, {val: 'Nein', title: 'Nein', id: 'inputDialektSelbstNein'}]">
@@ -61,21 +61,21 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group col-md-9" v-if="daten.dialektSelbst === 'Ja'">
+				<div :class="'form-group col-md-9' + ((error.dialektSelbst.empty) ? ' is-empty' : '')" v-if="daten.dialektSelbst === 'Ja'">
 					<label for="inputDialektSelbstWelcher">Welchen Dialekt beherrschen Sie?</label>
 					<input v-model="daten.dialektSelbstWelcher" type="text" class="form-control" id="inputDialektSelbstWelcher" placeholder="Dialekt">
 				</div>
 			</div>
-			<RadioFromTo v-model="daten.dialektSprechen" label="Wie gut sprechen Sie diesen Dialekt?" from="gar nicht" to="sehr gut" v-if="daten.dialektSelbst === 'Ja'"/>
-			<RadioFromTo v-model="daten.dialektNutzen" label="Wie häufig sprechen Sie Dialekt?" from="nie" to="immer" v-if="daten.dialektSelbst === 'Ja'"/>
-			<RadioFromTo v-model="daten.hochdeutschSprechen" label="Wie gut sprechen Sie Hochdeutsch?" from="gar nicht" to="sehr gut"/>
-			<RadioFromTo v-model="daten.hochdeutschNutzen" label="Wie häufig sprechen Sie Hochdeutsch?" from="nie" to="immer"/>
-			<RadioFromTo v-model="daten.alltagSprechen" label="Wie sprechen Sie hauptsächlich in Ihrem Alltag?" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
-			<div class="form-group" v-if="daten.alltagSprechen > 1 && daten.alltagSprechen < 7">
+			<RadioFromTo v-model="daten.dialektSprechen" :class="((error.dialektSprechen.empty) ? ' is-empty' : '')" label="Wie gut sprechen Sie diesen Dialekt?" from="gar nicht" to="sehr gut" v-if="daten.dialektSelbst === 'Ja'"/>
+			<RadioFromTo v-model="daten.dialektNutzen" :class="((error.dialektNutzen.empty) ? ' is-empty' : '')" label="Wie häufig sprechen Sie Dialekt?" from="nie" to="immer" v-if="daten.dialektSelbst === 'Ja'"/>
+			<RadioFromTo v-model="daten.hochdeutschSprechen" :class="((error.hochdeutschSprechen.empty) ? ' is-empty' : '')" label="Wie gut sprechen Sie Hochdeutsch?" from="gar nicht" to="sehr gut"/>
+			<RadioFromTo v-model="daten.hochdeutschNutzen" :class="((error.hochdeutschNutzen.empty) ? ' is-empty' : '')" label="Wie häufig sprechen Sie Hochdeutsch?" from="nie" to="immer"/>
+			<RadioFromTo v-model="daten.alltagSprechen" :class="((error.alltagSprechen.empty) ? ' is-empty' : '')" label="Wie sprechen Sie hauptsächlich in Ihrem Alltag?" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
+			<div :class="'form-group' + ((error.bezeichnungSprechweise.empty) ? ' is-empty' : '')" v-if="daten.alltagSprechen > 1 && daten.alltagSprechen < 7">
 				<label for="inputBezeichnungSprechweise">Wie bezeichnen Sie diese Sprechweise, die Sie hauptsächlich in Ihrem Alltag sprechen?</label>
 				<input v-model="daten.bezeichnungSprechweise" type="text" class="form-control" id="inputBezeichnungSprechweise" placeholder="">
 			</div>
-			<div class="form-group">
+			<div :class="'form-group' + ((error.anmerkungen.empty) ? ' is-empty' : '')">
 				<label for="inputAnmerkungen">Haben Sie noch Anmerkungen zu diesem Fragebogen?</label>
 				<input v-model="daten.anmerkungen" type="text" class="form-control" id="inputAnmerkungen" placeholder="">
 			</div>
@@ -97,14 +97,16 @@
 <script>
 import RadioFromTo from './formular/RadioFromTo'
 import Wohnort from './formular/Wohnort'
+import _ from 'lodash'
 
 export default {
 	name: 'DataPage',
 	data () {
 		return {
 			weitereAngaben: false,
+			errors: 0,
 			daten: {
-				geburtsjahr: '',
+				geburtsjahr: null,
 				bioGesch: 0,
 				beruf: '',
 				wohnort: {
@@ -116,6 +118,7 @@ export default {
 					plz: ''
 				},
 				sprachenDialekte: '',
+				// Weitere Angaben
 				wohnortVater: {
 					ort: '',
 					plz: ''
@@ -137,7 +140,101 @@ export default {
 				anmerkungen: '',
 				dsgvo: false
 			},
+			error: {
+				geburtsjahr: {
+					check: function (val) { return (val >= 1890 && val <= 2020) },
+					msg: 'Geburtsjahr muss nach 1890 liegen und vierstellig angegeben werden!'
+				},
+				bioGesch: {
+					check: function (val) { return (val > 0 && val < 4) },
+					msg: 'Bitte geben Sie Ihr Geschlecht an!'
+				},
+				beruf: {
+					check: function (val) { return val },
+					msg: 'Bitte geben Sie Ihren Beruf an!'
+				},
+				wohnort: {
+					check: function (val) { return val.ort && val.plz },
+					msg: 'Bitte geben Sie den Wohnort mit gültiger Postleitzahl an!'
+				},
+				wohnortLeben: {
+					check: function (val) { return val.ort && val.plz },
+					msg: 'Bitte geben Sie den Wohnort mit gültiger Postleitzahl an!'
+				},
+				sprachenDialekte: {
+					check: function (val) { return val },
+					msg: 'Das ist ein Pflichtfeld!'
+				},
+				// Weitere Angaben
+				sprachlichErzogenVater: {
+					check: function (val, weitere) { return val || !weitere },
+					msg: 'Das ist ein Pflichtfeld!'
+				},
+				sprachlichErzogenMutter: {
+					check: function (val, weitere) { return val || !weitere },
+					msg: 'Das ist ein Pflichtfeld!'
+				},
+			}
 		}
+	},
+	methods: {
+		checkErrors () {
+			this.errors = 0
+			Object.keys(this.daten).forEach(function (aKey) {
+				this.checkError(aKey)
+				if (this.error[aKey].error) {
+					this.errors += 1
+				}
+			}, this)
+		},
+		checkError (aKey, uVal = undefined) {
+			let cVal = uVal
+			if (cVal === undefined) {
+				cVal = this.daten[aKey]
+			}
+			if (!this.error[aKey]) {
+				this.error[aKey] = {}
+			}
+			this.$set(this.error[aKey], 'error', false)
+			if (this.error[aKey].check) {
+				if (!this.error[aKey].check(cVal, this.weitereAngaben)) {
+					this.$set(this.error[aKey], 'error', true)
+				}
+			}
+			this.$set(this.error[aKey], 'empty', true)
+			if (cVal) {
+				if (cVal && typeof cVal === 'object') {
+					Object.keys(cVal).some(function (aProp) {
+						if (cVal[aProp]) {
+							this.$set(this.error[aKey], 'empty', false)
+							return true
+						}
+					}, this)
+				} else {
+					this.$set(this.error[aKey], 'empty', false)
+				}
+			}
+		},
+		debouncedCheckErrors: _.debounce(function () {
+			this.checkErrors()
+		}, 200),
+		initCheckErrors () {
+			this.checkErrors()
+			Object.keys(this.error).forEach(function (aKey) {
+				if (this.daten[aKey] && typeof this.daten[aKey] === 'object') {
+					Object.keys(this.daten[aKey]).forEach(function (aProp) {
+						if (this.daten[aKey][aProp]) {
+							this.$watch('daten.' + aKey + '.' + aProp, function (nVal) { this.$nextTick(() => { this.debouncedCheckErrors() }) })
+						}
+					}, this)
+				} else {
+					this.$watch('daten.' + aKey, function (nVal) { this.$nextTick(() => { this.debouncedCheckErrors() }) })
+				}
+			}, this)
+		},
+	},
+	mounted () {
+		this.initCheckErrors()
 	},
 	components: {
 		RadioFromTo,
@@ -166,5 +263,8 @@ export default {
 	.weitereangaben:after {
 		left: inherit;
 		right: -15px;
+	}
+	.is-empty {
+		opacity: 0.5;
 	}
 </style>
