@@ -24,14 +24,14 @@
 		data () {
 			return {
 				site: 0,
-				playerId: 0,
+				playerId: null,
 			}
 		},
 		mounted () {
 		},
 		methods: {
 			start () {		// Wenn noch keine playerId dann zum Fragebogen für Sozialdaten, sonst weiter zum Spiel ...
-				this.site = ((this.playerId === 0) ? 1 : 2)
+				this.site = ((this.playerId) ? 2 : 1)
 			},
 		},
 		components: {
@@ -42,4 +42,8 @@
 </script>
 
 <style>
+	.content {
+		padding-bottom: 100px;
+		padding-top: 20px;
+	}
 </style>
