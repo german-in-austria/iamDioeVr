@@ -1,28 +1,23 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
-  </div>
+	<div id="app">
+		<StartPage/>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+	/* global csrf */
+	import StartPage from './components/StartPage'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+	export default {
+		name: 'App',
+		mounted () {
+			console.log(csrf)
+		},
+		components: {
+			StartPage
+		}
+	}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>

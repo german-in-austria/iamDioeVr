@@ -4,15 +4,14 @@
 {% load iamDioeVrTags %}
 {% block title %} - Startseite{% endblock %}
 {% block sitecss %}
-	{% render_bundle 'manifest' 'css' 'VR' %}
-	{% render_bundle 'vendor' 'css' 'VR' %}
 	{% render_bundle 'app' 'css' 'VR' %}
 {% endblock %}
 {% block inhalt %}
 	<div id="app"></div>
 {% endblock %}
 {% block sitejs %}
-	{% render_bundle 'manifest' 'js' 'VR' %}
-	{% render_bundle 'vendor' 'js' 'VR' %}
+	<script>
+		var csrf='{{ csrf_token }}';
+	</script>
 	{% render_bundle 'app' 'js' 'VR' %}
 {% endblock %}
