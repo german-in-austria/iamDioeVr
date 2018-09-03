@@ -26,20 +26,8 @@
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="form-group col-md-6">
-				<label for="inputWohnort">Aktueller Wohnort (inkl. Postleitzahl)</label>
-				<div class="form-row">
-					<div class="form-group col-sm-8 col-md-9"><input v-model="daten.wohnort.ort" type="text" class="form-control" id="inputWohnort" placeholder="Wohnort"></div>
-					<div class="form-group col-sm-4 col-md-3"><input v-model="daten.wohnort.plz" type="number" class="form-control" id="inputWohnortPlz" placeholder="Postleitzahl"></div>
-				</div>
-			</div>
-			<div class="form-group col-md-6">
-				<label for="inputWohnortLeben">Wo haben Sie den Großteil Ihres Lebens verbracht? (inkl. Postleitzahl)</label>
-				<div class="form-row">
-					<div class="form-group col-sm-8 col-md-9"><input v-model="daten.wohnortLeben.ort" type="text" class="form-control" id="inputWohnortLeben" placeholder="Wohnort"></div>
-					<div class="form-group col-sm-4 col-md-3"><input v-model="daten.wohnortLeben.plz" type="number" class="form-control" id="inputWohnortLebenPlz" placeholder="Postleitzahl"></div>
-				</div>
-			</div>
+			<Wohnort v-model="daten.wohnort" class="col-md-6" label="Aktueller Wohnort (inkl. Postleitzahl)"/>
+			<Wohnort v-model="daten.wohnortLeben" class="col-md-6" label="Wo haben Sie den Großteil Ihres Lebens verbracht? (inkl. Postleitzahl)"/>
 		</div>
 		<div class="form-group">
 			<label for="inputSprachenDialekte">Mit welchen Sprachen / Dialekten sind Sie aufgewachsen?</label>
@@ -49,30 +37,17 @@
 		<div class="alert alert-success" role="alert">
 			<h4>Warum wollen wir das wissen?</h4>
 			<p>Wir untersuchen, wie Menschen in Österreich Sprache verwenden, über Sprache denken und Sprache wahrnehmen. <b>Ihre Angaben helfen uns, Spracheinstellung in Österreich auszuwerten und besser zu verstehen.</b></p>
-			<p><b>Weitere Angaben zu Ihnen</b> helfen uns Ihren Beitrag besonders gut in das Gesamtbild einzuordnen.</p>
+			<p class="mb-0"><b>Weitere Angaben zu Ihnen</b> helfen uns Ihren Beitrag besonders gut in das Gesamtbild einzuordnen.</p>
 		</div>
 		<button @click="weitereAngaben = true" type="button" class="btn btn-success w-100" v-if="!weitereAngaben">Weitere Angaben machen</button>
 
-		<div v-if="weitereAngaben">
-			<br>
-			<h4>Weitere Angaben: <button @click="weitereAngaben = false" type="button" class="btn btn-warning btn-sm float-right">Doch keine weitere Angaben machen</button></h4>
+		<div class="weitereangaben" v-if="weitereAngaben">
+			<h4>Weitere Angaben: <button @click="weitereAngaben = false" type="button" class="btn btn-warning btn-sm float-right"><span class="d-none d-sm-block">Doch keine weitere Angaben machen</span><span class="d-block d-sm-none">&times;</span></button></h4>
 			<br>
 			<p><b>Wo sind Ihre Eltern aufgewachsen?</b></p>
 			<div class="form-row">
-				<div class="form-group col-md-6">
-					<label for="inputWohnortVater">Wohnort Vater (inkl. Postleitzahl)</label>
-					<div class="form-row">
-						<div class="form-group col-sm-8 col-md-9"><input v-model="daten.wohnortVater.ort" type="text" class="form-control" id="inputWohnortVater" placeholder="Wohnort"></div>
-						<div class="form-group col-sm-4 col-md-3"><input v-model="daten.wohnortVater.plz" type="number" class="form-control" id="inputWohnortVaterPlz" placeholder="Postleitzahl"></div>
-					</div>
-				</div>
-				<div class="form-group col-md-6">
-					<label for="inputWohnortMutter">Wohnort Mutter (inkl. Postleitzahl)</label>
-					<div class="form-row">
-						<div class="form-group col-sm-8 col-md-9"><input v-model="daten.wohnortMutter.ort" type="text" class="form-control" id="inputWohnortMutter" placeholder="Wohnort"></div>
-						<div class="form-group col-sm-4 col-md-3"><input v-model="daten.wohnortMutter.plz" type="number" class="form-control" id="inputWohnortMutterPlz" placeholder="Postleitzahl"></div>
-					</div>
-				</div>
+				<Wohnort v-model="daten.wohnortVater" class="col-md-6" label="Wohnort Vater (inkl. Postleitzahl)"/>
+				<Wohnort v-model="daten.wohnortMutter" class="col-md-6" label="Wohnort Mutter (inkl. Postleitzahl)"/>
 			</div>
 			<RadioFromTo v-model="daten.sprachlichErzogenVater" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
 			<RadioFromTo v-model="daten.sprachlichErzogenMutter" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
@@ -80,13 +55,9 @@
 				<div class="form-group col-md-3">
 					<label>Beherrschen Sie selbst einen Dialekt?</label>
 					<div class="form-control">
-						<div class="form-check form-check-inline">
-							<input v-model="daten.dialektSelbst" class="form-check-input" type="radio" name="inputDialektSelbst" id="inputDialektSelbstJa" value="Ja">
-							<label class="form-check-label" for="inputDialektSelbstJa">Ja</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input v-model="daten.dialektSelbst" class="form-check-input" type="radio" name="inputDialektSelbst" id="inputDialektSelbstNein" value="Nein">
-							<label class="form-check-label" for="inputDialektSelbstNein">Nein</label>
+						<div class="form-check form-check-inline" v-for="aCheck in [{val: 'Ja', title: 'Ja', id: 'inputDialektSelbstJa'}, {val: 'Nein', title: 'Nein', id: 'inputDialektSelbstNein'}]">
+							<input v-model="daten.dialektSelbst" class="form-check-input" type="radio" name="inputBioGesch" :id="aCheck.id" :value="aCheck.val">
+							<label class="form-check-label" :for="aCheck.id">{{ aCheck.title }}</label>
 						</div>
 					</div>
 				</div>
@@ -111,7 +82,7 @@
 		</div>
 
 		<div class="alert alert-primary mt-3" role="alert">
-			<h5 class="text-center">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h5>
+			<h5 class="text-center mb-0">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h5>
 		</div>
 		<div class="form-group form-check">
 			<input v-model="daten.dsgvo" type="checkbox" class="form-check-input" id="dsgvoCheck">
@@ -125,6 +96,7 @@
 
 <script>
 import RadioFromTo from './formular/RadioFromTo'
+import Wohnort from './formular/Wohnort'
 
 export default {
 	name: 'DataPage',
@@ -169,9 +141,30 @@ export default {
 	},
 	components: {
 		RadioFromTo,
+		Wohnort,
 	},
 }
 </script>
 
 <style scoped>
+	.weitereangaben {
+		position: relative;
+		margin-top: 30px;
+		margin-bottom: 30px;
+		padding-top: 15px;
+		padding-bottom: 1px;
+	}
+	.weitereangaben:before, .weitereangaben:after {
+		content: "";
+		position: absolute;
+		background: #d4edda;
+		left: -15px;
+		top: 0px;
+		bottom: 0px;
+		width: 3px;
+	}
+	.weitereangaben:after {
+		left: inherit;
+		right: -15px;
+	}
 </style>
