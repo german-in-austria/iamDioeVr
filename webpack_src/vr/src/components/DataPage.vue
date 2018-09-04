@@ -212,14 +212,13 @@ export default {
 			}
 			this.$set(this.error[aKey], 'error', false)
 			if (this.error[aKey].check) {
-				// console.log(aKey, cVal, !this.error[aKey].check(cVal, this.weitereAngaben))
 				if (!this.error[aKey].check(cVal, this.weitereAngaben)) {
 					this.$set(this.error[aKey], 'error', true)
 				}
 			}
 			this.$set(this.error[aKey], 'empty', true)
 			if (cVal) {
-				if (cVal && typeof cVal === 'object') {
+				if (typeof cVal === 'object') {
 					Object.keys(cVal).some(function (aProp) {
 						if (cVal[aProp]) {
 							this.$set(this.error[aKey], 'empty', false)
@@ -233,7 +232,7 @@ export default {
 		},
 		debouncedCheckErrors: _.debounce(function () {
 			this.checkErrors()
-		}, 200),
+		}, 250),
 		initCheckErrors () {
 			this.checkErrors()
 			Object.keys(this.error).forEach(function (aKey) {

@@ -4,3 +4,7 @@ app/*/migrations/__pycache__/*.pyc
 app/*/migrations/*.py
 !app/*/migrations/__init__.py
 app/secret/*.*
+*/node_modules
+webpack_src/*/node_modules
+webpack_src/*/node_modules/*.*
+db.sqlite3

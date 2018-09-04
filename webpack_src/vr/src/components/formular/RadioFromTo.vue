@@ -1,5 +1,5 @@
 <template>
-	<div class="form-group">
+	<div :class="'form-group' + ((disabled) ? ' disabled' : '')">
 		<label>{{ label }}</label>
 		<div :class="'form-control ' + (inputClass || '')" style="height:auto; position:relative;">
 			<div class="row">
@@ -8,7 +8,7 @@
 					<div class="d-flex justify-content-center radio-flex">
 						<template v-for="i in [1, 2, 3, 4, 5, 6, 7]">
 							<div class="flex-fill radio-spacer" v-if="i > 1"></div>
-							<input v-model="aValue" class="form-check-input position-static radio" :name="'radioft' + _uid" type="radio" :value="i">
+							<input v-model="aValue" class="form-check-input position-static radio" :name="'radioft' + _uid" type="radio" :value="i" :disabled="disabled">
 						</template>
 					</div>
 				</div>
@@ -22,7 +22,7 @@
 <script>
 export default {
 	name: 'RadioFromTo',
-	props: ['label', 'from', 'to', 'value', 'inputClass', 'error'],
+	props: ['label', 'from', 'to', 'value', 'inputClass', 'error', 'disabled'],
 	data () {
 		return {
 			aValue: null,
@@ -58,5 +58,8 @@ export default {
 	}
 	.radio-flex {
 		min-height: 20px;
+	}
+	.disabled {
+		opacity: 0.5;
 	}
 </style>

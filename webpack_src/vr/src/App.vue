@@ -3,6 +3,7 @@
 		<div class="content">
 			<StartPage @start="start()" v-if="site === 0"/>
 			<DataPage @savedata="saveData" v-if="site === 1"/>
+			<GamePage v-if="site === 2"/>
 		</div>
 	</div>
 </template>
@@ -11,6 +12,7 @@
 	/* global csrf */
 	import StartPage from './components/StartPage'
 	import DataPage from './components/DataPage'
+	import GamePage from './components/GamePage'
 
 	export default {
 		name: 'App',
@@ -46,6 +48,7 @@
 		components: {
 			StartPage,
 			DataPage,
+			GamePage,
 		},
 	}
 </script>
