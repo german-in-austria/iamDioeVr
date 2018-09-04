@@ -45,7 +45,7 @@
 		<button @click="weitereAngaben = true; checkErrors()" type="button" class="btn btn-success w-100" v-if="!weitereAngaben">Weitere Angaben machen</button>
 
 		<div class="weitereangaben" v-if="weitereAngaben">
-			<h4>Weitere Angaben: <button @click="weitereAngaben = false" type="button" class="btn btn-warning btn-sm float-right"><span class="d-none d-sm-block">Doch keine weitere Angaben machen</span><span class="d-block d-sm-none">&times;</span></button></h4>
+			<h4>Weitere Angaben: <button @click="weitereAngaben = false" type="button" class="btn btn-warning btn-sm float-right"><span class="d-none d-sm-block">Doch keine weiteren Angaben machen</span><span class="d-block d-sm-none">&times;</span></button></h4>
 			<br>
 			<p><b>Wo sind Ihre Eltern aufgewachsen?</b></p>
 			<div class="form-row">
@@ -59,7 +59,7 @@
 					<label>Beherrschen Sie selbst einen Dialekt?</label>
 					<div class="form-control">
 						<div class="form-check form-check-inline" v-for="aCheck in [{val: 'Ja', title: 'Ja', id: 'inputDialektSelbstJa'}, {val: 'Nein', title: 'Nein', id: 'inputDialektSelbstNein'}]">
-							<input v-model="daten.dialektSelbst" class="form-check-input" type="radio" name="inputBioGesch" :id="aCheck.id" :value="aCheck.val">
+							<input v-model="daten.dialektSelbst" class="form-check-input" type="radio" name="inputDialektSelbst" :id="aCheck.id" :value="aCheck.val">
 							<label class="form-check-label" :for="aCheck.id">{{ aCheck.title }}</label>
 						</div>
 					</div>
@@ -100,7 +100,7 @@
 			</ul>
 		</div>
 
-		<button @click="" type="button" class="btn btn-primary w-100" :disabled="errors > 0">Los geht’s</button>
+		<button @click="nextStep()" type="button" class="btn btn-primary w-100" :disabled="errors > 0">Los geht’s</button>
 
 	</div>
 </template>
@@ -247,6 +247,13 @@ export default {
 					this.$watch('daten.' + aKey, function (nVal) { this.$nextTick(() => { this.$set(this.error[aKey], 'changed', true); this.debouncedCheckErrors() }) })
 				}
 			}, this)
+		},
+		nextStep () {
+			if (this.errors === 0) {
+				this.$emit('savedata', JSON.parse(JSON.stringify(this.daten)), this.weitereAngaben)
+			} else {
+				alert('Das Formular enthält noch Fehler!')
+			}
 		},
 	},
 	mounted () {

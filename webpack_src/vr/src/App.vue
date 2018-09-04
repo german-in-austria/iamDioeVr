@@ -2,7 +2,7 @@
 	<div id="app">
 		<div class="content">
 			<StartPage @start="start()" v-if="site === 0"/>
-			<DataPage v-if="site === 1"/>
+			<DataPage @savedata="saveData" v-if="site === 1"/>
 		</div>
 	</div>
 </template>
@@ -23,16 +23,25 @@
 		},
 		data () {
 			return {
+				devMode: (process.env.NODE_ENV === 'development'),
 				site: 0,
 				playerId: null,
 			}
 		},
 		mounted () {
+			if (this.devMode) {
+				this.playerId = -1
+			}
 		},
 		methods: {
 			start () {		// Wenn noch keine playerId dann zum Fragebogen für Sozialdaten, sonst weiter zum Spiel ...
 				this.site = ((this.playerId) ? 2 : 1)
 			},
+			saveData (data, weitere) {
+				// ToDo: Speichervorgang und playerId vergeben
+				console.log(JSON.stringify(data))
+				console.log(data, weitere)
+			}
 		},
 		components: {
 			StartPage,
