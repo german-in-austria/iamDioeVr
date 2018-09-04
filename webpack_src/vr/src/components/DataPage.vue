@@ -10,6 +10,7 @@
 			<div class="form-group col-sm-4 col-md-2">
 				<label for="inputGeburtsjahr">Geburtsjahr *</label>
 				<input v-model="daten.geburtsjahr" type="number" min="1890" max="2020" :class="'form-control' + ((error.geburtsjahr.error) ? ' is-invalid' : ' is-valid')" id="inputGeburtsjahr" placeholder="Geburtsjahr">
+				<div class="invalid-tooltip" v-if="error.geburtsjahr.changed">{{ error.geburtsjahr.msg }}</div>
 			</div>
 			<div class="form-group col-sm-8 col-md-4">
 				<label>biologisches Geschlecht *</label>
@@ -23,15 +24,17 @@
 			<div class="form-group col-md-6">
 				<label for="inputBeruf">Beruf *</label>
 				<input v-model="daten.beruf" type="text" :class="'form-control' + ((error.beruf.error) ? ' is-invalid' : ' is-valid')" id="inputBeruf" placeholder="Beruf">
+				<div class="invalid-tooltip" v-if="error.beruf.changed">{{ error.beruf.msg }}</div>
 			</div>
 		</div>
 		<div class="form-row">
-			<Wohnort v-model="daten.wohnort" :class="'col-md-6' + ((error.wohnort.error) ? ' is-invalid' : ' is-valid')" label="Aktueller Wohnort (inkl. Postleitzahl) *"/>
-			<Wohnort v-model="daten.wohnortLeben" :class="'col-md-6' + ((error.wohnortLeben.error) ? ' is-invalid' : ' is-valid')" label="Wo haben Sie den Großteil Ihres Lebens verbracht? (inkl. Postleitzahl) *"/>
+			<Wohnort v-model="daten.wohnort" class="col-md-6" :error="error.wohnort" :inputClass="((error.wohnort.error) ? ' is-invalid' : ' is-valid')" label="Aktueller Wohnort (inkl. Postleitzahl) *"/>
+			<Wohnort v-model="daten.wohnortLeben" class="col-md-6" :error="error.wohnortLeben" :inputClass="((error.wohnortLeben.error) ? ' is-invalid' : ' is-valid')" label="Wo haben Sie den Großteil Ihres Lebens verbracht? (inkl. Postleitzahl) *"/>
 		</div>
-		<div class="form-group">
+		<div class="form-group" style="position: relative;">
 			<label for="inputSprachenDialekte">Mit welchen Sprachen / Dialekten sind Sie aufgewachsen? *</label>
 			<input v-model="daten.sprachenDialekte" type="text" :class="'form-control' + ((error.sprachenDialekte.error) ? ' is-invalid' : ' is-valid')" id="inputSprachenDialekte" placeholder="Sprachen, Dialekte">
+			<div class="invalid-tooltip" v-if="error.sprachenDialekte.changed">{{ error.sprachenDialekte.msg }}</div>
 		</div>
 
 		<div class="alert alert-success" role="alert">
@@ -39,7 +42,7 @@
 			<p>Wir untersuchen, wie Menschen in Österreich Sprache verwenden, über Sprache denken und Sprache wahrnehmen. <b>Ihre Angaben helfen uns, Spracheinstellung in Österreich auszuwerten und besser zu verstehen.</b></p>
 			<p class="mb-0"><b>Weitere Angaben zu Ihnen</b> helfen uns Ihren Beitrag besonders gut in das Gesamtbild einzuordnen.</p>
 		</div>
-		<button @click="weitereAngaben = true" type="button" class="btn btn-success w-100" v-if="!weitereAngaben">Weitere Angaben machen</button>
+		<button @click="weitereAngaben = true; checkErrors()" type="button" class="btn btn-success w-100" v-if="!weitereAngaben">Weitere Angaben machen</button>
 
 		<div class="weitereangaben" v-if="weitereAngaben">
 			<h4>Weitere Angaben: <button @click="weitereAngaben = false" type="button" class="btn btn-warning btn-sm float-right"><span class="d-none d-sm-block">Doch keine weitere Angaben machen</span><span class="d-block d-sm-none">&times;</span></button></h4>
@@ -49,8 +52,8 @@
 				<Wohnort v-model="daten.wohnortVater" :class="'col-md-6' + ((error.wohnortVater.empty) ? ' is-empty' : '')" label="Wohnort Vater (inkl. Postleitzahl)"/>
 				<Wohnort v-model="daten.wohnortMutter" :class="'col-md-6' + ((error.wohnortMutter.empty) ? ' is-empty' : '')" label="Wohnort Mutter (inkl. Postleitzahl)"/>
 			</div>
-			<RadioFromTo v-model="daten.sprachlichErzogenVater" :class="((error.sprachlichErzogenVater.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
-			<RadioFromTo v-model="daten.sprachlichErzogenMutter" :class="((error.sprachlichErzogenMutter.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
+			<RadioFromTo v-model="daten.sprachlichErzogenVater"  :error="error.sprachlichErzogenVater" :inputClass="((error.sprachlichErzogenVater.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
+			<RadioFromTo v-model="daten.sprachlichErzogenMutter"  :error="error.sprachlichErzogenMutter" :inputClass="((error.sprachlichErzogenMutter.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
 			<div class="form-row">
 				<div :class="'form-group col-md-3' + ((error.dialektSelbst.empty) ? ' is-empty' : '')">
 					<label>Beherrschen Sie selbst einen Dialekt?</label>
@@ -61,7 +64,7 @@
 						</div>
 					</div>
 				</div>
-				<div :class="'form-group col-md-9' + ((error.dialektSelbst.empty) ? ' is-empty' : '')" v-if="daten.dialektSelbst === 'Ja'">
+				<div :class="'form-group col-md-9' + ((error.dialektSelbstWelcher.empty) ? ' is-empty' : '')" v-if="daten.dialektSelbst === 'Ja'">
 					<label for="inputDialektSelbstWelcher">Welchen Dialekt beherrschen Sie?</label>
 					<input v-model="daten.dialektSelbstWelcher" type="text" class="form-control" id="inputDialektSelbstWelcher" placeholder="Dialekt">
 				</div>
@@ -85,11 +88,19 @@
 			<h5 class="text-center mb-0">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h5>
 		</div>
 		<div class="form-group form-check">
-			<input v-model="daten.dsgvo" type="checkbox" class="form-check-input" id="dsgvoCheck">
+			<input v-model="daten.dsgvo" type="checkbox" :class="'form-check-input' + ((error.dsgvo.error) ? ' is-invalid' : ' is-valid')" id="dsgvoCheck">
 			<label class="form-check-label" for="dsgvoCheck">Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten - wie in der <a href="https://iam.dioe.at/datenschutz/" target="_blank">Datenschutzerklärung</a> beschrieben - vom SFB „Deutsch in Österreich: Variation – Kontakt – Perzeption“ wissenschaftlich ausgewertet werden und im Zuge dessen innerhalb des SFBs verwendet werden. Diese Einwilligung kann ich jederzeit widerrufen.</label>
+			<div class="invalid-tooltip" v-if="error.dsgvo.changed">{{ error.dsgvo.msg }}</div>
 		</div>
 
-		<button @click="" type="button" class="btn btn-primary w-100" :disabled="!daten.dsgvo">Los geht’s</button>
+		<div class="alert alert-danger mt-3" role="alert" v-if="errors > 0">
+			<h5>Formular enthält Fehler:</h5>
+			<ul class="mb-0">
+				<li v-for="aError in error" v-if="aError.error">{{ aError.msg }}</li>
+			</ul>
+		</div>
+
+		<button @click="" type="button" class="btn btn-primary w-100" :disabled="errors > 0">Los geht’s</button>
 
 	</div>
 </template>
@@ -155,24 +166,28 @@ export default {
 				},
 				wohnort: {
 					check: function (val) { return val.ort && val.plz },
-					msg: 'Bitte geben Sie den Wohnort mit gültiger Postleitzahl an!'
+					msg: 'Bitte geben Sie Ihren Wohnort mit gültiger Postleitzahl an!'
 				},
 				wohnortLeben: {
 					check: function (val) { return val.ort && val.plz },
-					msg: 'Bitte geben Sie den Wohnort mit gültiger Postleitzahl an!'
+					msg: 'Bitte geben Sie den Wohnort, an dem Sie den Großteil Ihres Lebens verbracht haben, mit gültiger Postleitzahl an!'
 				},
 				sprachenDialekte: {
 					check: function (val) { return val },
-					msg: 'Das ist ein Pflichtfeld!'
+					msg: 'Bitte geben Sie an mit welchen Sprachen / Dialekten Sie aufgewachsen sind!'
 				},
 				// Weitere Angaben
 				sprachlichErzogenVater: {
 					check: function (val, weitere) { return val || !weitere },
-					msg: 'Das ist ein Pflichtfeld!'
+					msg: 'Bitte geben Sie an wie Sie von Ihrem Vater sprachlich erzogen wurden!'
 				},
 				sprachlichErzogenMutter: {
 					check: function (val, weitere) { return val || !weitere },
-					msg: 'Das ist ein Pflichtfeld!'
+					msg: 'Bitte geben Sie an wie Sie von Ihrer Mutter sprachlich erzogen wurden!'
+				},
+				dsgvo: {
+					check: function (val, weitere) { return val },
+					msg: 'Bitte stimmen Sie der Verarbeitung Ihrer personenbezogenen Daten zu!'
 				},
 			}
 		}
@@ -197,6 +212,7 @@ export default {
 			}
 			this.$set(this.error[aKey], 'error', false)
 			if (this.error[aKey].check) {
+				// console.log(aKey, cVal, !this.error[aKey].check(cVal, this.weitereAngaben))
 				if (!this.error[aKey].check(cVal, this.weitereAngaben)) {
 					this.$set(this.error[aKey], 'error', true)
 				}
@@ -223,12 +239,12 @@ export default {
 			Object.keys(this.error).forEach(function (aKey) {
 				if (this.daten[aKey] && typeof this.daten[aKey] === 'object') {
 					Object.keys(this.daten[aKey]).forEach(function (aProp) {
-						if (this.daten[aKey][aProp]) {
-							this.$watch('daten.' + aKey + '.' + aProp, function (nVal) { this.$nextTick(() => { this.debouncedCheckErrors() }) })
+						if (this.daten[aKey][aProp] || this.daten[aKey][aProp] === 0 || this.daten[aKey][aProp] === '') {
+							this.$watch('daten.' + aKey + '.' + aProp, function (nVal) { this.$nextTick(() => { this.$set(this.error[aKey], 'changed', true); this.debouncedCheckErrors() }) })
 						}
 					}, this)
 				} else {
-					this.$watch('daten.' + aKey, function (nVal) { this.$nextTick(() => { this.debouncedCheckErrors() }) })
+					this.$watch('daten.' + aKey, function (nVal) { this.$nextTick(() => { this.$set(this.error[aKey], 'changed', true); this.debouncedCheckErrors() }) })
 				}
 			}, this)
 		},
@@ -263,8 +279,5 @@ export default {
 	.weitereangaben:after {
 		left: inherit;
 		right: -15px;
-	}
-	.is-empty {
-		opacity: 0.5;
 	}
 </style>

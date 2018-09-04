@@ -1,19 +1,20 @@
 <template>
 	<div class="form-group">
 		<label>{{ label }}</label>
-		<div class="form-control" style="height:auto;">
+		<div :class="'form-control ' + (inputClass || '')" style="height:auto; position:relative;">
 			<div class="row">
 				<div class="col-md-3">{{ from }}</div>
 				<div class="col-md-6">
 					<div class="d-flex justify-content-center radio-flex">
 						<template v-for="i in [1, 2, 3, 4, 5, 6, 7]">
 							<div class="flex-fill radio-spacer" v-if="i > 1"></div>
-							<input v-bind:value="value" v-on:input="$emit('input', $event.target.value)" class="form-check-input position-static radio" :name="'radioft' + _uid" type="radio" :value="i">
+							<input v-model="aValue" class="form-check-input position-static radio" :name="'radioft' + _uid" type="radio" :value="i">
 						</template>
 					</div>
 				</div>
 				<div class="col-md-3 text-right">{{ to }}</div>
 			</div>
+			<div class="invalid-tooltip" style="display: block; top: calc( 100% - 1rem ); left: 5px;" v-if="error && error.error && error.msg && error.changed">{{ error.msg }}</div>
 		</div>
 	</div>
 </template>
@@ -21,10 +22,22 @@
 <script>
 export default {
 	name: 'RadioFromTo',
-	props: ['label', 'from', 'to', 'value'],
+	props: ['label', 'from', 'to', 'value', 'inputClass', 'error'],
 	data () {
 		return {
+			aValue: null,
 		}
+	},
+	watch: {
+		'aValue' (nVal) {
+			this.$emit('input', nVal)
+		},
+		'value' (nVal) {
+			this.aValue = nVal
+		},
+	},
+	mounted () {
+		this.aValue = this.value
 	},
 }
 </script>

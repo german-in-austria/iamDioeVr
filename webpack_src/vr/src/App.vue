@@ -46,4 +46,7 @@
 		padding-bottom: 50px;
 		padding-top: 20px;
 	}
+	.is-empty .form-control {
+		border-color: #5aaaff;
+	}
 </style>
