@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.conf import settings
 import vr.models as dbmodels
+from django.db.models import Sum
 
 import os
 import json
@@ -36,23 +37,57 @@ pSaetze = [
 
 
 def start(request):
+	"""Startseite."""
 	return render_to_response(
 		'vr/start.html',
 		RequestContext(request, {'mediaUrl': settings.MEDIA_URL, 'gData': {'typ': pTypen, 'orte': pOrte, 'alter': pAlter, 'saetze': pSaetze}}),)
 
 
 def data(request):
-	posFiles = getFiles()
-	game = {'S': [], 'D': []}
-	game['S'].append(list(posFiles['02']['GAW']['S']['j'].values())[0])
-	game['S'].append(list(posFiles['02']['TAR']['S']['a'].values())[0])
-	game['S'].append(list(posFiles['02']['WEI']['S']['j'].values())[0])
-	game['D'].append(list(posFiles['02']['GAW']['D']['a'].values())[0])
-	game['D'].append(list(posFiles['02']['TAR']['D']['j'].values())[0])
-	game['D'].append(list(posFiles['02']['WEI']['D']['a'].values())[0])
+	"""Daten abfragen durch VUE."""
+	from random import shuffle
+	# Sätze
+	aSaetze = dbmodels.audiodatei.objects.all().values('satz').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
+	# ToDo: Bereits gespielte Sätze unwarscheinlicher machen!
+	aSaetzeMax = 0
+	for aSatz in aSaetze:
+		if aSatz['benutzt'] > aSaetzeMax:
+			aSaetzeMax = aSatz['benutzt']
+	uSatz = weighted_choice([x['satz'] for x in aSaetze], [aSaetzeMax - x['benutzt'] + 1 for x in aSaetze])
+	# Orte
+	aOrte = dbmodels.audiodatei.objects.filter(satz=uSatz).values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
+	# ToDo: Bereits gespielte Orte unwarscheinlicher machen!
+	aOrteMax = 0
+	for aOrt in aOrte:
+		if aOrt['benutzt'] > aOrteMax:
+			aOrteMax = aOrt['benutzt']
+	uOrte = []
+	dg = 0
+	while len(uOrte) < 3:
+		dg += 1
+		uOrt = weighted_choice([x['ort'] for x in aOrte], [aOrteMax - x['benutzt'] + 1 for x in aOrte])
+		if uOrt not in uOrte or dg > 10:
+			uOrte.append(uOrt)
+	# Spieldaten
+	game = {}
+	for uTyp in ['S', 'D']:
+		for uOrt in uOrte:
+			aFiles = []
+			aFilesMax = 0
+			for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt, typ=uTyp).order_by('benutzt')[:10]:
+				aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'benutzt': aFile.benutzt})
+				if aFile.benutzt > aFilesMax:
+					aFilesMax = aFile.benutzt
+			uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
+			if uTyp not in game:
+				game[uTyp] = []
+			game[uTyp].append(uFile)
+		shuffle(uOrte)
 	return httpOutput(json.dumps(game), mimetype='application/json; charset=utf-8')
 
+
 def updateaudio(request):
+	"""Audiodateien in Datenbank eintragen."""
 	if not request.user.is_authenticated():
 		return httpOutput('Erst einloggen!')
 	files = [f for f in os.listdir(settings.MEDIA_DIR) if os.path.isfile(os.path.join(settings.MEDIA_DIR, f))]
@@ -88,33 +123,23 @@ def updateaudio(request):
 					output += 'added\n'
 	return httpOutput('Updated ... ' + str(aUpdate) + '/' + str(aLen) + '/' + str(len(files)) + '\n' + '-----' + '\n' + output)
 
-def getFiles():
-	oFiles = {}
-	files = [f for f in os.listdir(settings.MEDIA_DIR) if os.path.isfile(os.path.join(settings.MEDIA_DIR, f))]
-	aLen = 0
-	for file in files:
-		fileData = file[:-4].split("_")
-		if file.split(".")[-1] == "ogg" and len(fileData) == 5:
-			(aTyp, aOrt, aAlter, aSatz, aGpKennzahl) = fileData
-			if any(d['s'] == aSatz for d in pSaetze):
-				if aSatz not in oFiles:
-					oFiles[aSatz] = {}
-				if any(d['s'] == aOrt for d in pOrte):
-					if aOrt not in oFiles[aSatz]:
-						oFiles[aSatz][aOrt] = {}
-					if any(d['s'] == aTyp for d in pTypen):
-						if aTyp not in oFiles[aSatz][aOrt]:
-							oFiles[aSatz][aOrt][aTyp] = {}
-						if any(d['s'] == aAlter for d in pAlter):
-							if aAlter not in oFiles[aSatz][aOrt][aTyp]:
-								oFiles[aSatz][aOrt][aTyp][aAlter] = {}
-							oFiles[aSatz][aOrt][aTyp][aAlter][aGpKennzahl] = {'typ': aTyp, 'ort': aOrt, 'alter': aAlter, 'satz': aSatz, 'gpKennzahl': aGpKennzahl, 'file': file}
-							aLen += 1
-	return oFiles
-
 
 def httpOutput(aoutput, mimetype='text/plain; charset=utf-8'):
 	"""Einfache http Ausgabe."""
 	txtausgabe = HttpResponse(aoutput)
 	txtausgabe['Content-Type'] = mimetype
 	return txtausgabe
+
+
+def weighted_choice(values, weights):
+	"""Gewichteter Zufall."""
+	from random import random
+	from bisect import bisect
+	total = 0
+	cum_weights = []
+	for w in weights:
+		total += w
+		cum_weights.append(total)
+	x = random() * 0.9999 * total
+	i = bisect(cum_weights, x)
+	return values[i]
