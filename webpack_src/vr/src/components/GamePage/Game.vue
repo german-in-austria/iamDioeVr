@@ -1,28 +1,30 @@
 <template>
-	<div class="card" v-if="gameData.game && !gameData.game.loading && gameData.game.ready && gameData.game.data">
-		<div class="card-header text-white bg-primary text-center">
-			<div class="d-flex mb-2">
-				<div>Runde {{ rundeNr + 1 }}</div>
-				<div class="mx-auto">Sprachbeispiel {{ beispielNr + 1 }}</div>
-				<div class="hidden">Runde {{ rundeNr + 1 }}</div>
+	<div v-if="gameData.game && !gameData.game.loading && gameData.game.ready && gameData.game.data">
+		<div class="card">
+			<div class="card-header text-white bg-primary text-center">
+				<div class="d-flex mb-2">
+					<div>Runde {{ rundeNr + 1 }}</div>
+					<div class="mx-auto">Sprachbeispiel {{ beispielNr + 1 }}</div>
+					<div class="hidden">Runde {{ rundeNr + 1 }}</div>
+				</div>
+				<button @click="played += 1" type="button" class="btn btn-sm btn-light" :disabled="playing" v-if="played < 2">{{ ((played === 0) ? 'Abspielen' : 'Noch einmal hören?') }}</button>
+				<button @click="" type="button" class="btn btn-sm btn-light" disabled v-else>Kann nur zwei mal angehört werden</button>
+				{{ gameData.game.data[['S', 'D'][rundeNr]][beispielNr].file }}
 			</div>
-			<button @click="played += 1" type="button" class="btn btn-sm btn-light" :disabled="playing" v-if="played < 2">{{ ((played === 0) ? 'Abspielen' : 'Noch einmal hören?') }}</button>
-			<button @click="" type="button" class="btn btn-sm btn-light" disabled v-else>Kann nur zwei mal angehört werden</button>
-			{{ gameData.game.data[['S', 'D'][rundeNr]][beispielNr].file }}
+			<div class="card-body" style="background: #eee;">
+				<div class="ort-btn" v-for="aOrt in gData.orte">{{ aOrt.s }} - {{ aOrt.t }}</div>
+			</div>
+			<div class="card-body">
+				<RadioFromTo v-model="sympathie" label="Das Gehörte wirkt auf mich:" from="sympathisch" to="unsympathisch" :disabled="played === 0"/>
+			</div>
+			<div class="card-footer text-white bg-primary text-right">
+				<button @click="" type="button" class="btn btn-sm btn-light" :disabled="played === 0 || sympathie === 0">Weiter</button>
+			</div>
 		</div>
-		<div class="card-body" style="background: #eee;">
-			<div class="ort-btn" v-for="aOrt in gData.orte">{{ aOrt.s }} - {{ aOrt.t }}</div>
-		</div>
-		<div class="card-body">
-			<RadioFromTo v-model="sympathie" label="Das Gehörte wirkt auf mich:" from="sympathisch" to="unsympathisch" :disabled="played === 0"/>
-		</div>
-		<div class="card-footer text-white bg-primary text-right">
-			<button @click="" type="button" class="btn btn-sm btn-light" :disabled="played === 0 || sympathie === 0">Weiter</button>
-		</div>
+		<div class="loading" v-if="loading">Lade ...</div>
 	</div>
 	<div v-else>
-		<br><br><br>
-		<h1 class="text-center">Lade ...</h1>
+		<div class="loading">Lade ...</div>
 	</div>
 </template>
 
@@ -41,6 +43,7 @@
 				sympathie: 0,
 				gData: gData,
 				gameData: {},
+				loading: false,
 			}
 		},
 		mounted () {
@@ -64,5 +67,18 @@
 	}
 	.hidden {
 		visibility: hidden;
+	}
+	.loading {
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		padding-top: 40vh;
+		text-align: center;
+		color: #fff;
+		background: #000;
+		background: rgba(0,0,0,0.5);
+		font-size: 60px;
 	}
 </style>
