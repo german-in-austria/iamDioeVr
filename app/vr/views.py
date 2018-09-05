@@ -75,7 +75,7 @@ def data(request):
 			aFiles = []
 			aFilesMax = 0
 			for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt, typ=uTyp).order_by('benutzt')[:10]:
-				aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'benutzt': aFile.benutzt})
+				aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
 				if aFile.benutzt > aFilesMax:
 					aFilesMax = aFile.benutzt
 			uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
