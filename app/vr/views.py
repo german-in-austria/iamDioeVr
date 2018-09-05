@@ -14,15 +14,15 @@ pTypen = [
 	{'s': 'D', 't': 'Dialekt'}
 ]
 pOrte = [
-	{'s': 'GAW', 't': 'Gaweinstal'},
-	{'s': 'HÜT', 't': 'Hüttschlag'},
-	{'s': 'NEC', 't': 'Neckenmarkt'},
-	{'s': 'NEU', 't': 'Neumarkt an der Ybbs'},
-	{'s': 'RAG', 't': 'Raggal'},
-	{'s': 'TAR', 't': 'Tarrenz'},
-	{'s': 'TAU', 't': 'Taufkirchen an der Pram'},
-	{'s': 'TUX', 't': 'Tux'},
-	{'s': 'WEI', 't': 'Weißbriach'}
+	{'s': 'GAW', 'sf': 'GAW', 't': 'Gaweinstal'},
+	{'s': 'HÜT', 'sf': 'HUET', 't': 'Hüttschlag'},
+	{'s': 'NEC', 'sf': 'NEC', 't': 'Neckenmarkt'},
+	{'s': 'NEU', 'sf': 'NEU', 't': 'Neumarkt an der Ybbs'},
+	{'s': 'RAG', 'sf': 'RAG', 't': 'Raggal'},
+	{'s': 'TAR', 'sf': 'TAR', 't': 'Tarrenz'},
+	{'s': 'TAU', 'sf': 'TAU', 't': 'Taufkirchen an der Pram'},
+	{'s': 'TUX', 'sf': 'TUX', 't': 'Tux'},
+	{'s': 'WEI', 'sf': 'WEI', 't': 'Weißbriach'}
 ]
 pAlter = [
 	{'s': 'j', 't': 'jung'},
@@ -100,7 +100,7 @@ def updateaudio(request):
 			(aTyp, aOrt, aAlter, aSatz, aGpKennzahl) = fileData
 			if (
 				any(d['s'] == aSatz for d in pSaetze) and
-				any(d['s'] == aOrt for d in pOrte) and
+				any(d['sf'] == aOrt for d in pOrte) and
 				any(d['s'] == aTyp for d in pTypen) and
 				any(d['s'] == aAlter for d in pAlter)
 			):
