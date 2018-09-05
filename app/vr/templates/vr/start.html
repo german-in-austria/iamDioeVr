@@ -12,6 +12,7 @@
 {% block sitejs %}
 	<script>
 		var csrf = '{{ csrf_token }}';
+		var mediaUrl = '{{ mediaUrl }}';
 		var gData = JSON.parse('{{ gData|toJson|safe }}');
 	</script>
 	{% render_bundle 'manifest' 'js' 'VR' %}

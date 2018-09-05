@@ -1,15 +1,16 @@
 <template>
 	<div id="app">
+		<button @click="getGameData(gameTest)" type="button" class="btn btn-sm btn-light" v-if="devMode">Test</button>
 		<div class="content">
 			<StartPage @start="start()" v-if="site === 0"/>
 			<DataPage @savedata="saveData" v-if="site === 1"/>
-			<GamePage v-if="site === 2"/>
+			<GamePage @getGameData="getGameData" v-if="site === 2"/>
 		</div>
 	</div>
 </template>
 
 <script>
-	/* global csrf gData */
+	/* global csrf mediaUrl gData */
 	import StartPage from './components/StartPage'
 	import DataPage from './components/DataPage'
 	import GamePage from './components/GamePage'
@@ -28,11 +29,12 @@
 				devMode: (process.env.NODE_ENV === 'development'),
 				site: 0,
 				playerId: null,
+				gameTest: {},
 			}
 		},
 		mounted () {
-			console.log(gData)
 			if (this.devMode) {
+				console.log(mediaUrl, gData)
 				this.playerId = -1
 			}
 		},
@@ -44,7 +46,24 @@
 				// ToDo: Speichervorgang und playerId vergeben
 				console.log(JSON.stringify(data))
 				console.log(data, weitere)
-			}
+			},
+			getGameData (target) {
+				target.game = {}
+				this.$set(target.game, 'ready', false)
+				this.$set(target.game, 'loading', true)
+				this.$http.post('',
+					{
+						get: 'gameData',
+						playerId: this.playerId,
+					})
+				.then((response) => {
+					console.log(response.data)
+				})
+				.catch((err) => {
+					console.log(err)
+					alert('Fehler!')
+				})
+			},
 		},
 		components: {
 			StartPage,

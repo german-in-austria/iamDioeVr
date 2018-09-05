@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # IAMDIOEVR_SECRET_KEY = Benutze: https://www.miniwebtool.com/django-secret-key-generator/							#
 # IAMDIOEVR_STATIC_ROOT = "/var/www/example.com/static/"		(Default: None)										#
 # IAMDIOEVR_STATIC_URL = "/static/"								(Default: "/static/")								#
+# IAMDIOEVR_MEDIA_URL = "https://iamdioevr.dioe.at/media/"		(Default: "https://iamdioevr.dioe.at/media/")		#
 # Datenbank:																										#
 # IAMDIOEVR_DB="django.db.backends.postgresql"					(Default: "django.db.backends.sqlite3")				#
 # IAMDIOEVR_DB_NAME="PersonenDB"								(Default: os.path.join(BASE_DIR, 'db.sqlite3'))		#
@@ -159,5 +160,8 @@ WEBPACK_LOADER = {
 	}
 }
 
-MEDIA_URL = "media/"
+MEDIA_URL = "https://iamdioevr.dioe.at/media/"
 MEDIA_DIR = os.path.abspath(os.path.join(BASE_DIR, os.pardir, os.pardir, 'persistent', 'media'))
+
+if 'IAMDIOEVR_MEDIA_URL' in os.environ and os.environ['IAMDIOEVR_MEDIA_URL']:
+	MEDIA_URL = os.environ['IAMDIOEVR_MEDIA_URL']

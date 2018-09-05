@@ -1,8 +1,10 @@
 """Anzeige für Startseite."""
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.http import HttpResponse
 from django.conf import settings
 import os
+import json
 
 pTypen = [
 	{'s': 'S', 't': 'Standard'},
@@ -32,10 +34,15 @@ pSaetze = [
 
 
 def start(request):
-	print(getFiles())
 	return render_to_response(
 		'vr/start.html',
-		RequestContext(request, {'gData': {'typ': pTypen, 'orte': pOrte, 'alter': pAlter, 'saetze': pSaetze}}),)
+		RequestContext(request, {'mediaUrl': settings.MEDIA_URL, 'gData': {'typ': pTypen, 'orte': pOrte, 'alter': pAlter, 'saetze': pSaetze}}),)
+
+
+def data(request):
+	posFiles = getFiles()
+	print(posFiles['02']['GAW']['S']['j'])
+	return httpOutput(json.dumps(['xxx']), mimetype='application/json')
 
 
 def getFiles():
@@ -58,7 +65,14 @@ def getFiles():
 						if any(d['s'] == aAlter for d in pAlter):
 							if aAlter not in oFiles[aSatz][aOrt][aTyp]:
 								oFiles[aSatz][aOrt][aTyp][aAlter] = {}
-							oFiles[aSatz][aOrt][aTyp][aAlter][aGpKennzahl] = file
+							oFiles[aSatz][aOrt][aTyp][aAlter][aGpKennzahl] = {'typ': aTyp, 'ort': aOrt, 'alter': aAlter, 'satz': aSatz, 'gpKennzahl': aGpKennzahl, 'file': file}
 							aLen += 1
 	# print(aLen, '/', len(files))
 	return oFiles
+
+
+def httpOutput(aoutput, mimetype='text/plain'):
+	"""Einfache http Ausgabe."""
+	txtausgabe = HttpResponse(aoutput)
+	txtausgabe['Content-Type'] = mimetype
+	return txtausgabe

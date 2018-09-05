@@ -17,6 +17,7 @@
 		</div>
 		<div class="card-footer text-white bg-primary text-right">
 			<button @click="" type="button" class="btn btn-sm btn-light" :disabled="played === 0 || sympathie === 0">Weiter</button>
+			<button @click="$emit('getGameData', gameData)" type="button" class="btn btn-sm btn-light">Test</button>
 		</div>
 	</div>
 </template>
@@ -35,6 +36,7 @@
 				playing: false,
 				sympathie: 0,
 				gData: gData,
+				gameData: {},
 			}
 		},
 		components: {
