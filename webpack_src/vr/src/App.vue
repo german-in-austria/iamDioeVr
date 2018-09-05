@@ -9,7 +9,7 @@
 </template>
 
 <script>
-	/* global csrf */
+	/* global csrf gData */
 	import StartPage from './components/StartPage'
 	import DataPage from './components/DataPage'
 	import GamePage from './components/GamePage'
@@ -31,6 +31,7 @@
 			}
 		},
 		mounted () {
+			console.log(gData)
 			if (this.devMode) {
 				this.playerId = -1
 			}

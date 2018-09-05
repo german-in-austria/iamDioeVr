@@ -11,7 +11,8 @@
 {% endblock %}
 {% block sitejs %}
 	<script>
-		var csrf='{{ csrf_token }}';
+		var csrf = '{{ csrf_token }}';
+		var gData = JSON.parse('{{ gData|toJson|safe }}');
 	</script>
 	{% render_bundle 'manifest' 'js' 'VR' %}
 	{% render_bundle 'vendor' 'js' 'VR' %}

@@ -158,3 +158,6 @@ WEBPACK_LOADER = {
 		'STATS_FILE': os.path.abspath(os.path.join(BASE_DIR, os.pardir, 'webpack_src', 'vr', 'webpack-stats.json')),
 	}
 }
+
+MEDIA_URL = "media/"
+MEDIA_DIR = os.path.abspath(os.path.join(BASE_DIR, os.pardir, os.pardir, 'persistent', 'media'))
