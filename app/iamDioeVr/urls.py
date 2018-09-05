@@ -6,4 +6,5 @@ urlpatterns = [
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^$', include('vr.urls', namespace='Vr')),
 	url(r'^data/', views.data, name='data'),
+	url(r'^updateaudio/', views.updateaudio, name='updateaudio'),
 ]

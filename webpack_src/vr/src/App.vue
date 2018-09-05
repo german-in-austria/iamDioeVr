@@ -51,11 +51,10 @@
 				target.game = {}
 				this.$set(target.game, 'ready', false)
 				this.$set(target.game, 'loading', true)
-				this.$http.post('',
-					{
-						get: 'gameData',
-						playerId: this.playerId,
-					})
+				this.$http.post('', {
+					get: 'gameData',
+					playerId: this.playerId,
+				})
 				.then((response) => {
 					console.log(response.data)
 				})

@@ -30,3 +30,8 @@ Put these into a `.env` file for convenient access.
 | IAMDIOEVR_DB_PORT     | `5432`                                   |
 | IAMDIOEVR_DB_HOST     | `postgres`                               |
 | IAMDIOEVR_STATIC_ROOT | `/static`                                |
+
+
+### Sonstiges
+ - `/admin/` Admin
+ - `/updateaudio/` Audiodateien in Datenbank eintragen

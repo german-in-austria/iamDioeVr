@@ -2,7 +2,7 @@ from django.db import models
 
 
 class audiodatei(models.Model):
-	added			= models.DateTimeField(																				  verbose_name="Hinzugefügt")
+	added			= models.DateTimeField(auto_now_add=True															, verbose_name="Hinzugefügt")
 	file			= models.CharField(max_length=255	, blank=True, null=True											, verbose_name="Dateiname")
 	typ				= models.CharField(max_length=255	, blank=True, null=True											, verbose_name="Typ (S/D)")
 	ort				= models.CharField(max_length=255	, blank=True, null=True											, verbose_name="Ort")
@@ -25,7 +25,7 @@ class antworten(models.Model):
 	durchgang		= models.IntegerField(				  blank=True, null=True											, verbose_name="Durchgang")
 	runde			= models.IntegerField(				  blank=True, null=True											, verbose_name="Runde")
 	beispiel		= models.IntegerField(				  blank=True, null=True											, verbose_name="Beispiel")
-	zeit			= models.DateTimeField(																				  verbose_name="Zeit")
+	zeit			= models.DateTimeField(auto_now_add=True															, verbose_name="Zeit")
 	audiodatei		= models.ForeignKey('audiodatei'	, on_delete=models.CASCADE										, verbose_name="Audiodatei")
 	wiedergaben		= models.IntegerField(				  blank=True, null=True											, verbose_name="Wiedergaben")
 	gewOrt			= models.CharField(max_length=255	, blank=True, null=True											, verbose_name="gewählter Ort")
@@ -42,7 +42,7 @@ class antworten(models.Model):
 
 class spiel(models.Model):
 	spieler			= models.ForeignKey('spieler'		, on_delete=models.CASCADE										, verbose_name="Spieler")
-	zeit			= models.DateTimeField(																				  verbose_name="Zeit")
+	zeit			= models.DateTimeField(auto_now_add=True															, verbose_name="Zeit")
 
 	def __str__(self):
 		return '{} ({})'.format(self.spieler, self.zeit)
@@ -54,7 +54,7 @@ class spiel(models.Model):
 
 
 class spieler(models.Model):
-	zeit			= models.DateTimeField(																				  verbose_name="Zeit")
+	zeit			= models.DateTimeField(auto_now_add=True															, verbose_name="Zeit")
 	# ToDo: Fragebogen mit Orten usw.
 
 	def __str__(self):

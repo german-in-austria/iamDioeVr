@@ -3,6 +3,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.conf import settings
+import vr.models as dbmodels
+
 import os
 import json
 
@@ -41,9 +43,50 @@ def start(request):
 
 def data(request):
 	posFiles = getFiles()
-	print(posFiles['02']['GAW']['S']['j'])
-	return httpOutput(json.dumps(['xxx']), mimetype='application/json')
+	game = {'S': [], 'D': []}
+	game['S'].append(list(posFiles['02']['GAW']['S']['j'].values())[0])
+	game['S'].append(list(posFiles['02']['TAR']['S']['a'].values())[0])
+	game['S'].append(list(posFiles['02']['WEI']['S']['j'].values())[0])
+	game['D'].append(list(posFiles['02']['GAW']['D']['a'].values())[0])
+	game['D'].append(list(posFiles['02']['TAR']['D']['j'].values())[0])
+	game['D'].append(list(posFiles['02']['WEI']['D']['a'].values())[0])
+	return httpOutput(json.dumps(game), mimetype='application/json; charset=utf-8')
 
+def updateaudio(request):
+	if not request.user.is_authenticated():
+		return httpOutput('Erst einloggen!')
+	files = [f for f in os.listdir(settings.MEDIA_DIR) if os.path.isfile(os.path.join(settings.MEDIA_DIR, f))]
+	aLen = 0
+	aUpdate = 0
+	output = ''
+	for file in files:
+		fileData = file[:-4].split("_")
+		if file.split(".")[-1] == "ogg" and len(fileData) == 5:
+			(aTyp, aOrt, aAlter, aSatz, aGpKennzahl) = fileData
+			if (
+				any(d['s'] == aSatz for d in pSaetze) and
+				any(d['s'] == aOrt for d in pOrte) and
+				any(d['s'] == aTyp for d in pTypen) and
+				any(d['s'] == aAlter for d in pAlter)
+			):
+				aLen += 1
+				output += str(aLen).rjust(4, ' ') + ' - ' + file + ' -> '
+				try:
+					dbmodels.audiodatei.objects.get(file=file)
+					output += 'exists\n'
+				except dbmodels.audiodatei.DoesNotExist:
+					aUpdate += 1
+					nAudiodatei = dbmodels.audiodatei()
+					nAudiodatei.file = file
+					nAudiodatei.typ = aTyp
+					nAudiodatei.ort = aOrt
+					nAudiodatei.alter = aAlter
+					nAudiodatei.satz = aSatz
+					nAudiodatei.gpKennzahl = aGpKennzahl
+					nAudiodatei.benutzt = 0
+					nAudiodatei.save()
+					output += 'added\n'
+	return httpOutput('Updated ... ' + str(aUpdate) + '/' + str(aLen) + '/' + str(len(files)) + '\n' + '-----' + '\n' + output)
 
 def getFiles():
 	oFiles = {}
@@ -67,11 +110,10 @@ def getFiles():
 								oFiles[aSatz][aOrt][aTyp][aAlter] = {}
 							oFiles[aSatz][aOrt][aTyp][aAlter][aGpKennzahl] = {'typ': aTyp, 'ort': aOrt, 'alter': aAlter, 'satz': aSatz, 'gpKennzahl': aGpKennzahl, 'file': file}
 							aLen += 1
-	# print(aLen, '/', len(files))
 	return oFiles
 
 
-def httpOutput(aoutput, mimetype='text/plain'):
+def httpOutput(aoutput, mimetype='text/plain; charset=utf-8'):
 	"""Einfache http Ausgabe."""
 	txtausgabe = HttpResponse(aoutput)
 	txtausgabe['Content-Type'] = mimetype
