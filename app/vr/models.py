@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 
 class audiodatei(models.Model):
@@ -55,10 +56,11 @@ class spiel(models.Model):
 
 class spieler(models.Model):
 	zeit			= models.DateTimeField(auto_now_add=True															, verbose_name="Zeit")
+	uuid			= models.UUIDField(default=uuid.uuid4, editable=False, unique=True									, verbose_name="uuid")
 	# ToDo: Fragebogen mit Orten usw.
 
 	def __str__(self):
-		return '{} ({})'.format(self.pk, self.zeit)
+		return '{} ({} - {})'.format(self.pk, self.zeit, self.uuid)
 
 	class Meta:
 		verbose_name = "Spieler"

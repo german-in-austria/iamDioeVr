@@ -27,18 +27,18 @@
 			return {
 				devMode: (process.env.NODE_ENV === 'development'),
 				site: 0,
-				playerId: null,
+				playerUuId: null,
 			}
 		},
 		mounted () {
 			if (this.devMode) {
 				console.log(mediaUrl, gData)
-				this.playerId = -1
+				this.playerUuId = '2c8dd99b-3b42-48a7-9cd6-df63f5b2122f'
 			}
 		},
 		methods: {
-			start () {		// Wenn noch keine playerId dann zum Fragebogen für Sozialdaten, sonst weiter zum Spiel ...
-				this.site = ((this.playerId) ? 2 : 1)
+			start () {		// Wenn noch keine playerUuId dann zum Fragebogen für Sozialdaten, sonst weiter zum Spiel ...
+				this.site = ((this.playerUuId) ? 2 : 1)
 			},
 			saveData (data, weitere) {
 				// ToDo: Speichervorgang und playerId vergeben
@@ -51,12 +51,17 @@
 				this.$set(target.game, 'loading', true)
 				this.$http.post('', {
 					get: 'gameData',
-					playerId: this.playerId,
+					playerUuId: this.playerUuId,
 				})
 				.then((response) => {
 					this.$set(target.game, 'loading', false)
-					this.$set(target.game, 'ready', true)
-					this.$set(target.game, 'data', response.data)
+					if (this.playerUuId === response.data.playerUuId) {
+						this.$set(target.game, 'ready', true)
+						this.$set(target.game, 'data', response.data)
+					} else {
+						console.log(response.data)
+						alert('Fehler! "uuId" stimmt nicht überein!')
+					}
 				})
 				.catch((err) => {
 					console.log(err)

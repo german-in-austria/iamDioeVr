@@ -45,45 +45,53 @@ def start(request):
 
 def data(request):
 	"""Daten abfragen durch VUE."""
-	from random import shuffle
-	# Sätze
-	aSaetze = dbmodels.audiodatei.objects.all().values('satz').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
-	# ToDo: Bereits gespielte Sätze unwarscheinlicher machen!
-	aSaetzeMax = 0
-	for aSatz in aSaetze:
-		if aSatz['benutzt'] > aSaetzeMax:
-			aSaetzeMax = aSatz['benutzt']
-	uSatz = weighted_choice([x['satz'] for x in aSaetze], [aSaetzeMax - x['benutzt'] + 1 for x in aSaetze])
-	# Orte
-	aOrte = dbmodels.audiodatei.objects.filter(satz=uSatz).values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
-	# ToDo: Bereits gespielte Orte unwarscheinlicher machen!
-	aOrteMax = 0
-	for aOrt in aOrte:
-		if aOrt['benutzt'] > aOrteMax:
-			aOrteMax = aOrt['benutzt']
-	uOrte = []
-	dg = 0
-	while len(uOrte) < 3:
-		dg += 1
-		uOrt = weighted_choice([x['ort'] for x in aOrte], [aOrteMax - x['benutzt'] + 1 for x in aOrte])
-		if uOrt not in uOrte or dg > 10:
-			uOrte.append(uOrt)
-	# Spieldaten
-	game = {}
-	for uTyp in ['S', 'D']:
-		for uOrt in uOrte:
-			aFiles = []
-			aFilesMax = 0
-			for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt, typ=uTyp).order_by('benutzt')[:10]:
-				aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
-				if aFile.benutzt > aFilesMax:
-					aFilesMax = aFile.benutzt
-			uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
-			if uTyp not in game:
-				game[uTyp] = []
-			game[uTyp].append(uFile)
-		shuffle(uOrte)
-	return httpOutput(json.dumps(game), mimetype='application/json; charset=utf-8')
+	if 'get' in request.POST:
+		if request.POST.get('get') == 'gameData' and 'playerUuId' in request.POST:
+			game = {
+				'playerUuId': request.POST.get('playerUuId')
+			}
+			if game['playerUuId']:
+				dbmodels.spieler.objects.get(uuid=game['playerUuId'])  # Überprüfen ob UuId existiert
+				from random import shuffle
+				# Sätze
+				aSaetze = dbmodels.audiodatei.objects.all().values('satz').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
+				# ToDo: Bereits gespielte Sätze unwarscheinlicher machen!
+				aSaetzeMax = 0
+				for aSatz in aSaetze:
+					if aSatz['benutzt'] > aSaetzeMax:
+						aSaetzeMax = aSatz['benutzt']
+				uSatz = weighted_choice([x['satz'] for x in aSaetze], [aSaetzeMax - x['benutzt'] + 1 for x in aSaetze])
+				# Orte
+				aOrte = dbmodels.audiodatei.objects.filter(satz=uSatz).values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
+				# ToDo: Bereits gespielte Orte unwarscheinlicher machen!
+				aOrteMax = 0
+				for aOrt in aOrte:
+					if aOrt['benutzt'] > aOrteMax:
+						aOrteMax = aOrt['benutzt']
+				uOrte = []
+				dg = 0
+				while len(uOrte) < 3:
+					dg += 1
+					uOrt = weighted_choice([x['ort'] for x in aOrte], [aOrteMax - x['benutzt'] + 1 for x in aOrte])
+					if uOrt not in uOrte or dg > 10:
+						uOrte.append(uOrt)
+				# Spieldaten
+				for uTyp in ['S', 'D']:
+					for uOrt in uOrte:
+						aFiles = []
+						aFilesMax = 0
+						for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt, typ=uTyp).order_by('benutzt')[:10]:
+							# ToDo: Durchschnittswert
+							aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
+							if aFile.benutzt > aFilesMax:
+								aFilesMax = aFile.benutzt
+						uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
+						if uTyp not in game:
+							game[uTyp] = []
+						game[uTyp].append(uFile)
+					shuffle(uOrte)
+				return httpOutput(json.dumps(game), mimetype='application/json; charset=utf-8')
+	return httpOutput(json.dumps({'error': 'unknown request'}), mimetype='application/json; charset=utf-8')
 
 
 def updateaudio(request):
