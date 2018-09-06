@@ -114,8 +114,8 @@
 
 <style>
 	.content {
-		padding-bottom: 50px;
 		padding-top: 20px;
+		padding-bottom: 30px;
 	}
 	.is-empty .form-control {
 		border-color: #5aaaff;

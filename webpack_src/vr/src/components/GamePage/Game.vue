@@ -8,7 +8,7 @@
 					<div class="hidden">Runde {{ rundeNr + 1 }}</div>
 				</div>
 				<button  type="button" class="btn btn-sm btn-light" disabled v-if="!loaded">Lade Audio ...</button>
-				<button @click="abspielen()" type="button" class="btn btn-sm btn-light" :disabled="playing" v-else-if="played < 2">{{ ((playing) ? 'Wiedergabe ...' : ((played === 0) ? 'Abspielen' : 'Noch einmal hören?')) }}</button>
+				<button @click="abspielen()" type="button" class="btn btn-sm btn-light" :disabled="playing" v-else-if="played < 2">{{ ((playing) ? 'Wiedergabe ...' : ((played === 0) ? 'Abspielen' : 'Noch ein letztes mal hören?')) }}</button>
 				<button @click="" type="button" class="btn btn-sm btn-light" disabled v-else>Kann nur zwei mal angehört werden</button>
 			</div>
 			<div class="card-body" style="background: #eee;">
@@ -27,29 +27,11 @@
 						<path d="m489.8 908.2c-10.6 0.4 2.2 17.4 6.2 8 4.1-5.4-0.6-8.9-6.2-8z"/>
 					</g>
 					<g id="svg-layer-marker">
-						<circle r="14" cy="571.2" cx="2645.5"/>
-						<circle r="14" cy="568.4" cx="2374.5"/>
-						<circle r="14" cy="420.4" cx="2725.5"/>
-						<circle r="14" cy="300.6" cx="2267"/>
-						<circle r="14" cy="605" cx="2168.7"/>
-						<circle r="14" cy="765.5" cx="2700.1"/>
-						<circle r="14" cy="896.3" cx="2714.1"/>
-						<circle r="14" cy="1176.2" cx="2305.9"/>
-						<circle r="14" cy="1069.9" cx="2334.6"/>
-						<circle r="14" cy="1111.8" cx="1885.4"/>
-						<circle r="14" cy="515.5" cx="1887.9"/>
-						<circle r="14" cy="787.3" cx="1830.5"/>
-						<circle r="14" cy="457.4" cx="1614.2"/>
-						<circle r="14" cy="789.8" cx="1434.7"/>
-						<circle r="14" cy="1126.2" cx="1503.1"/>
-						<circle r="14" cy="1422.4" cx="1896.1"/>
-						<circle r="14" cy="1387.8" cx="1511.2"/>
-						<circle r="14" cy="1312.1" cx="1334.6"/>
-						<circle r="14" cy="1077.1" cx="833.2"/>
-						<circle r="14" cy="1079.5" cx="604.8"/>
-						<circle r="14" cy="1137.1" cx="945.4"/>
-						<circle r="14" cy="950.4" cx="233.4"/>
-						<circle r="14" cy="1107.3" cx="266.8"/>
+						<g @click="selectOrt(aOrt.s)" :transform="'translate(' + aOrt.cx + ' ' + aOrt.cy + ')'" :class="((selOrt === aOrt.s) ? ' selected' : '')" v-for="aOrt in gData.orte">
+							<circle :r="((selOrt === aOrt.s) ? 26 : 18)" cx="0" cy="0"/>
+							<text x="0" y="65" text-anchor="middle" style="font-size: 50px; stroke:#fff; stroke-width:4">{{ aOrt.t }}</text>
+							<text x="0" y="65" text-anchor="middle" style="font-size: 50px">{{ aOrt.t }}</text>
+						</g>
 					</g>
 				</svg>
 				<div class="d-block d-md-none">
@@ -139,6 +121,8 @@
 			selectOrt (sOrt) {
 				if (this.played > 0) {
 					this.selOrt = sOrt
+				} else {
+					alert('Spielen Sie den Satz mindestens einmal ab!')
 				}
 			},
 			audioLoaded () {
@@ -208,9 +192,9 @@
 		font-size: 60px;
 	}
 	#svg-layer-land > path {
-		fill: #44aa00;
+		fill: #b4b3f4;
 		fill-opacity: 1;
-		stroke: #000000;
+		stroke: #38385b;
 		stroke-width: 1.84806633;
 		stroke-linecap: round;
 		stroke-linejoin: miter;
@@ -219,6 +203,15 @@
 		stroke-opacity: 1;
 	}
 	#svg-layer-land > path.active {
-		fill: #3b9200;
+		fill: #9998f0;
+	}
+	#svg-layer-marker > g {
+		cursor: pointer;
+	}
+	#svg-layer-marker > g.selected {
+		fill: #00428a;
+	}
+	#svg-layer-marker > g:hover {
+		fill: #00428a;
 	}
 </style>

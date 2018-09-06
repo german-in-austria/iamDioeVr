@@ -14,15 +14,29 @@ pTypen = [
 	{'s': 'D', 't': 'Dialekt'}
 ]
 pOrte = [
-	{'s': 'GAW', 'sf': 'GAW', 't': 'Gaweinstal'},
-	{'s': 'HÜT', 'sf': 'HUET', 't': 'Hüttschlag'},
-	{'s': 'NEC', 'sf': 'NEC', 't': 'Neckenmarkt'},
-	{'s': 'NEU', 'sf': 'NEU', 't': 'Neumarkt an der Ybbs'},
-	{'s': 'RAG', 'sf': 'RAG', 't': 'Raggal'},
-	{'s': 'TAR', 'sf': 'TAR', 't': 'Tarrenz'},
-	{'s': 'TAU', 'sf': 'TAU', 't': 'Taufkirchen an der Pram'},
-	{'s': 'TUX', 'sf': 'TUX', 't': 'Tux'},
-	{'s': 'WEI', 'sf': 'WEI', 't': 'Weißbriach'}
+	{'s': 'GAW', 'sf': 'GAW', 't': 'Gaweinstal', 'cy': 420.4, 'cx': 2725.5},
+	{'s': 'HÜT', 'sf': 'HUET', 't': 'Hüttschlag', 'cy': 1126.2, 'cx': 1503.1},
+	{'s': 'NEC', 'sf': 'NEC', 't': 'Neckenmarkt', 'cy': 896.3, 'cx': 2714.1},
+	{'s': 'NEU', 'sf': 'NEU', 't': 'Neumarkt an der Ybbs', 'cy': 605, 'cx': 2168.7},
+	{'s': 'RAG', 'sf': 'RAG', 't': 'Raggal', 'cy': 1107.3, 'cx': 266.8},
+	{'s': 'TAR', 'sf': 'TAR', 't': 'Tarrenz', 'cy': 1079.5, 'cx': 604.8},
+	{'s': 'TAU', 'sf': 'TAU', 't': 'Taufkirchen an der Pram', 'cy': 457.4, 'cx': 1614.2},
+	{'s': 'TUX', 'sf': 'TUX', 't': 'Tux', 'cy': 1137.1, 'cx': 945.4},
+	{'s': 'WEI', 'sf': 'WEI', 't': 'Weißbriach', 'cy': 1387.8, 'cx': 1511.2},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Bregenz', 'cy': 950.4, 'cx': 233.4},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Innsbruck', 'cy': 1077.1, 'cx': 833.2},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Lienz', 'cy': 1312.1, 'cx': 1334.6},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Klagenfurt', 'cy': 1422.4, 'cx': 1896.1},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Salzburg', 'cy': 789.8, 'cx': 1434.7},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Steyrling', 'cy': 787.3, 'cx': 1830.5},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Linz', 'cy': 515.5, 'cx': 1887.9},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Oberwölz', 'cy': 1111.8, 'cx': 1885.4},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Passail', 'cy': 1069.9, 'cx': 2334.6},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Graz', 'cy': 1176.2, 'cx': 2305.9},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Eisenstadt', 'cy': 765.5, 'cx': 2700.1},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Allentsteig', 'cy': 300.6, 'cx': 2267},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'St.Pölten', 'cy': 568.4, 'cx': 2374.5},
+	# {'s': 'XXX', 'sf': 'XXX', 't': 'Wien', 'cy': 571.2, 'cx': 2645.5},
 ]
 pAlter = [
 	{'s': 'j', 't': 'jung'},
