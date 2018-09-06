@@ -31,7 +31,26 @@
 		<br>
 		<button @click="site = 2" type="button" class="btn btn-primary">Alles klar!</button>
 	</div>
-	<Game @getGameData="getGameData" @saveGameRound="saveGameRound" v-else-if="site === 2"/>
+	<Game @getGameData="getGameData" @saveGameRound="saveGameRound" @gameEnd="site = 3" v-else-if="site === 2"/>
+	<div class="text-center" v-else-if="site === 3">
+		<h1>Durchgang beendet</h1>
+		<p>...</p>
+		<br>
+		<button @click="site = 2" type="button" class="btn btn-success">Noch einmal spielen</button>
+		<button @click="site = 4" type="button" class="btn btn-primary">Nicht mehr spielen (Weiter zu den Ergebnissen)</button>
+	</div>
+	<div class="text-center" v-else-if="site === 4">
+		<h1>Spracheinstellung</h1>
+		<p>...</p>
+		<br>
+		<button @click="site = 5" type="button" class="btn btn-primary">Weiter zu den Detailergebnissen</button>
+	</div>
+	<div class="text-center" v-else-if="site === 5">
+		<h1>Detailergebnis</h1>
+		<p>...</p>
+		<br>
+		<button @click="reload" type="button" class="btn btn-primary">Ende</button>
+	</div>
 </template>
 
 <script>
@@ -51,6 +70,9 @@
 			saveGameRound (data) {
 				this.$emit('saveGameRound', data)
 			},
+			reload () {
+				location.reload()
+			}
 		},
 		components: {
 			Game,

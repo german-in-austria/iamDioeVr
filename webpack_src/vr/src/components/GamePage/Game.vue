@@ -69,7 +69,7 @@
 						this.rundeNr += 1
 						if (this.rundeNr > 1) {
 							this.rundeNr = 0
-							// ToDo: Spiel beendet ...
+							this.$emit('gameEnd')
 						}
 					}
 					this.played = 0
