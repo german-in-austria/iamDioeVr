@@ -3,7 +3,7 @@
 		<div class="content">
 			<StartPage @start="start()" v-if="site === 0"/>
 			<DataPage @savedata="saveData" v-if="site === 1"/>
-			<GamePage @getGameData="getGameData" v-if="site === 2"/>
+			<GamePage @getGameData="getGameData" @saveGameRound="saveGameRound" v-if="site === 2"/>
 		</div>
 	</div>
 </template>
@@ -44,6 +44,26 @@
 				// ToDo: Speichervorgang und playerId vergeben
 				console.log(JSON.stringify(data))
 				console.log(data, weitere)
+			},
+			saveGameRound (data) {
+				this.$set(data, 'saving', true)
+				this.$http.post('', {
+					set: 'gameRound',
+					playerUuId: this.playerUuId,
+					data: JSON.stringify(data.data)
+				})
+				.then((response) => {
+					if (this.playerUuId === response.data.playerUuId) {
+						this.$set(data, 'saving', false)
+					} else {
+						console.log(response.data)
+						alert('Fehler! "uuId" stimmt nicht überein!')
+					}
+				})
+				.catch((err) => {
+					console.log(err)
+					alert('Fehler!')
+				})
 			},
 			getGameData (target) {
 				this.$set(target, 'game', {})

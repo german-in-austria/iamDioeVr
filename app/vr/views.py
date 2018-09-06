@@ -44,14 +44,33 @@ def start(request):
 
 
 def data(request):
-	"""Daten abfragen durch VUE."""
+	"""Daten abfragen/setzen durch VUE."""
+	if 'set' in request.POST:
+		if request.POST.get('set') == 'gameRound' and 'playerUuId' in request.POST:
+			aData = json.loads(request.POST.get('data'))  # {'selOrt': 'NEU', 'rundeNr': 0, 'played': 1, 'beispielNr': 0, 'gId': 11, 'sympathie': 3, 'aId': 12}
+			aGame = dbmodels.spiel.objects.get(pk=aData['gId'], spieler__uuid=request.POST.get('playerUuId'))  # Überprüfen ob Spiel mit Spieler existiert
+			aAntwort = dbmodels.antworten()
+			aAntwort.spiel = aGame
+			aAntwort.audiodatei = dbmodels.audiodatei.objects.get(pk=aData['aId'])
+			aAntwort.runde = aData['rundeNr']
+			aAntwort.beispiel = aData['beispielNr']
+			aAntwort.wiedergaben = aData['played']
+			aAntwort.gewOrt = aData['selOrt']
+			aAntwort.sympathie = aData['sympathie']
+			if aAntwort.audiodatei.ort == aAntwort.gewOrt:
+				aAntwort.correct = True
+			aAntwort.save()
+			return httpOutput(json.dumps({'OK': True, 'playerUuId': request.POST.get('playerUuId')}), mimetype='application/json; charset=utf-8')
 	if 'get' in request.POST:
 		if request.POST.get('get') == 'gameData' and 'playerUuId' in request.POST:
 			game = {
 				'playerUuId': request.POST.get('playerUuId')
 			}
 			if game['playerUuId']:
-				dbmodels.spieler.objects.get(uuid=game['playerUuId'])  # Überprüfen ob UuId existiert
+				aSpiel = dbmodels.spiel()
+				aSpiel.spieler = dbmodels.spieler.objects.get(uuid=game['playerUuId'])  # Überprüfen ob UuId existiert
+				aSpiel.save()
+				game['gId'] = aSpiel.pk
 				from random import shuffle
 				# Sätze
 				aSaetze = dbmodels.audiodatei.objects.all().values('satz').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
@@ -105,10 +124,14 @@ def updateaudio(request):
 	for file in files:
 		fileData = file[:-4].split("_")
 		if file.split(".")[-1] == "ogg" and len(fileData) == 5:
+			uOrt = False
 			(aTyp, aOrt, aAlter, aSatz, aGpKennzahl) = fileData
+			for d in pOrte:
+				if d['sf'] == aOrt:
+					uOrt = d['s']
 			if (
 				any(d['s'] == aSatz for d in pSaetze) and
-				any(d['sf'] == aOrt for d in pOrte) and
+				uOrt and
 				any(d['s'] == aTyp for d in pTypen) and
 				any(d['s'] == aAlter for d in pAlter)
 			):
@@ -122,7 +145,7 @@ def updateaudio(request):
 					nAudiodatei = dbmodels.audiodatei()
 					nAudiodatei.file = file
 					nAudiodatei.typ = aTyp
-					nAudiodatei.ort = aOrt
+					nAudiodatei.ort = uOrt
 					nAudiodatei.alter = aAlter
 					nAudiodatei.satz = aSatz
 					nAudiodatei.gpKennzahl = aGpKennzahl

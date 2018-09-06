@@ -22,6 +22,7 @@
 			</div>
 		</div>
 		<div class="loading" v-if="loading">Lade ...</div>
+		<div class="loading" v-if="saveData.saving">Speichere ...</div>
 		<audio ref="audioplayer"><source :src="mediaUrl + gameData.game.data[['S', 'D'][rundeNr]][beispielNr].file" type="audio/ogg" v-if="gameData.game && !gameData.game.loading && gameData.game.ready && gameData.game.data"></audio>
 	</div>
 </template>
@@ -47,6 +48,7 @@
 				playing: false,
 				loaded: false,
 				audioReload: false,
+				saveData: {'saving': false, 'data': {}},
 			}
 		},
 		watch: {
@@ -58,24 +60,39 @@
 					})
 				}
 			},
+			'saveData.saving' (nVal) {
+				if (!nVal) {
+					this.$set(this.saveData, 'data', {})
+					this.beispielNr += 1
+					if (this.beispielNr > 2) {
+						this.beispielNr = 0
+						this.rundeNr += 1
+						if (this.rundeNr > 1) {
+							this.rundeNr = 0
+							// ToDo: Spiel beendet ...
+						}
+					}
+					this.played = 0
+					this.sympathie = 0
+					this.selOrt = null
+					this.playing = false
+					this.audioReload = true
+				}
+			},
 		},
 		methods: {
 			weiter () {
-				// ToDo: Antwort speichern ...
-				this.beispielNr += 1
-				if (this.beispielNr > 2) {
-					this.beispielNr = 0
-					this.rundeNr += 1
-					if (this.rundeNr > 1) {
-						this.rundeNr = 0
-						// ToDo: Spiel beendet ...
-					}
+				let sData = {
+					'beispielNr': this.beispielNr,
+					'rundeNr': this.rundeNr,
+					'selOrt': this.selOrt,
+					'sympathie': this.sympathie,
+					'played': this.played,
+					'gId': this.gameData.game.data.gId,
+					'aId': this.gameData.game.data[['S', 'D'][this.rundeNr]][this.beispielNr].pk,
 				}
-				this.played = 0
-				this.sympathie = 0
-				this.selOrt = null
-				this.playing = false
-				this.audioReload = true
+				this.$set(this.saveData, 'data', sData)
+				this.$emit('saveGameRound', this.saveData)
 			},
 			selectOrt (sOrt) {
 				if (this.played > 0) {

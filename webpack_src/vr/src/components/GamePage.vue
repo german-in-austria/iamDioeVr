@@ -31,7 +31,7 @@
 		<br>
 		<button @click="site = 2" type="button" class="btn btn-primary">Alles klar!</button>
 	</div>
-	<Game @getGameData="getGameData" v-else-if="site === 2"/>
+	<Game @getGameData="getGameData" @saveGameRound="saveGameRound" v-else-if="site === 2"/>
 </template>
 
 <script>
@@ -47,6 +47,9 @@
 		methods: {
 			getGameData (target) {
 				this.$emit('getGameData', target)
+			},
+			saveGameRound (data) {
+				this.$emit('saveGameRound', data)
 			},
 		},
 		components: {

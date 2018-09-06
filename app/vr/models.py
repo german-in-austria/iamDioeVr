@@ -23,7 +23,6 @@ class audiodatei(models.Model):
 
 class antworten(models.Model):
 	spiel			= models.ForeignKey('spiel'			, on_delete=models.CASCADE										, verbose_name="Spiel")
-	durchgang		= models.IntegerField(				  blank=True, null=True											, verbose_name="Durchgang")
 	runde			= models.IntegerField(				  blank=True, null=True											, verbose_name="Runde")
 	beispiel		= models.IntegerField(				  blank=True, null=True											, verbose_name="Beispiel")
 	zeit			= models.DateTimeField(auto_now_add=True															, verbose_name="Zeit")
@@ -31,14 +30,15 @@ class antworten(models.Model):
 	wiedergaben		= models.IntegerField(				  blank=True, null=True											, verbose_name="Wiedergaben")
 	gewOrt			= models.CharField(max_length=255	, blank=True, null=True											, verbose_name="gewählter Ort")
 	sympathie		= models.IntegerField(				  blank=True, null=True											, verbose_name="Sympathie (0-6)")
+	correct			= models.BooleanField(default=False																	, verbose_name="Richtige Antwort")
 
 	def __str__(self):
-		return '{} ({})'.format(self.audiodatei, self.zeit)
+		return '{}, {} [{}] {} ({}) - {}'.format(self.runde, self.beispiel, 'X' if self.correct else ' ', self.sympathie, self.zeit, self.audiodatei)
 
 	class Meta:
 		verbose_name = "Antwort"
 		verbose_name_plural = "Antworten"
-		ordering = ('spiel', 'durchgang', 'runde', 'beispiel', )
+		ordering = ('zeit', 'runde', 'beispiel', )
 
 
 class spiel(models.Model):
@@ -46,7 +46,7 @@ class spiel(models.Model):
 	zeit			= models.DateTimeField(auto_now_add=True															, verbose_name="Zeit")
 
 	def __str__(self):
-		return '{} ({})'.format(self.spieler, self.zeit)
+		return '{} ({}) - {}'.format(self.pk, self.zeit, self.spieler)
 
 	class Meta:
 		verbose_name = "Spiel"
