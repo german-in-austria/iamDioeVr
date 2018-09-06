@@ -51,7 +51,7 @@ def data(request):
 			aData = json.loads(request.POST.get('data'))
 			aSpieler = dbmodels.spieler()
 			aSpieler.geburtsjahr = int(aData['data']['geburtsjahr'])
-			aSpieler.bioGesch = int(aData['data']['geburtsjahr'])
+			aSpieler.bioGesch = int(aData['data']['bioGesch'])
 			aSpieler.beruf = aData['data']['beruf'].strip()
 			if ('ort' in aData['data']['wohnort'] and aData['data']['wohnort']['ort'].strip()) or ('plz' in aData['data']['wohnort'] and aData['data']['wohnort']['plz'] and int(aData['data']['wohnort']['plz']) > 0):
 				aOrt = None
