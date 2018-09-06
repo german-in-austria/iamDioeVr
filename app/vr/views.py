@@ -46,9 +46,72 @@ def start(request):
 def data(request):
 	"""Daten abfragen/setzen durch VUE."""
 	if 'set' in request.POST:
+		# Speichere Spielerdaten
 		if request.POST.get('set') == 'playerData':
 			aData = json.loads(request.POST.get('data'))
-			print(aData)
+			aSpieler = dbmodels.spieler()
+			aSpieler.geburtsjahr = int(aData['data']['geburtsjahr'])
+			aSpieler.bioGesch = int(aData['data']['geburtsjahr'])
+			aSpieler.beruf = aData['data']['beruf'].strip()
+			if ('ort' in aData['data']['wohnort'] and aData['data']['wohnort']['ort'].strip()) or ('plz' in aData['data']['wohnort'] and aData['data']['wohnort']['plz'] and int(aData['data']['wohnort']['plz']) > 0):
+				aOrt = None
+				try:
+					aOrt = dbmodels.ort.objects.get(plz=int(aData['data']['wohnort']['plz']), ort=aData['data']['wohnort']['ort'].strip())
+				except dbmodels.ort.DoesNotExist:
+					aOrt = dbmodels.ort()
+					aOrt.plz = int(aData['data']['wohnort']['plz'])
+					aOrt.ort = aData['data']['wohnort']['ort'].strip()
+					aOrt.save()
+				aSpieler.wohnort = aOrt
+			if ('ort' in aData['data']['wohnortLeben'] and aData['data']['wohnortLeben']['ort'].strip()) or ('plz' in aData['data']['wohnortLeben'] and aData['data']['wohnortLeben']['plz'] and int(aData['data']['wohnortLeben']['plz']) > 0):
+				aOrt = None
+				try:
+					aOrt = dbmodels.ort.objects.get(plz=int(aData['data']['wohnortLeben']['plz']), ort=aData['data']['wohnortLeben']['ort'].strip())
+				except dbmodels.ort.DoesNotExist:
+					aOrt = dbmodels.ort()
+					aOrt.plz = int(aData['data']['wohnortLeben']['plz'])
+					aOrt.ort = aData['data']['wohnortLeben']['ort'].strip()
+					aOrt.save()
+				aSpieler.wohnortLeben = aOrt
+			aSpieler.sprachenDialekte = aData['data']['sprachenDialekte'].strip()
+			aSpieler.dsgvo = aData['data']['dsgvo']
+			if aData['weitere']:
+				aSpieler.weitere = True
+				if ('ort' in aData['data']['wohnortVater'] and aData['data']['wohnortVater']['ort'].strip()) or ('plz' in aData['data']['wohnortVater'] and aData['data']['wohnortVater']['plz'] and int(aData['data']['wohnortVater']['plz']) > 0):
+					aOrt = None
+					try:
+						aOrt = dbmodels.ort.objects.get(plz=int(aData['data']['wohnortVater']['plz']), ort=aData['data']['wohnortVater']['ort'].strip())
+					except dbmodels.ort.DoesNotExist:
+						aOrt = dbmodels.ort()
+						aOrt.plz = int(aData['data']['wohnortVater']['plz'])
+						aOrt.ort = aData['data']['wohnortVater']['ort'].strip()
+						aOrt.save()
+					aSpieler.wohnortVater = aOrt
+				if ('ort' in aData['data']['wohnortMutter'] and aData['data']['wohnortMutter']['ort'].strip()) or ('plz' in aData['data']['wohnortMutter'] and aData['data']['wohnortMutter']['plz'] and int(aData['data']['wohnortMutter']['plz']) > 0):
+					aOrt = None
+					try:
+						aOrt = dbmodels.ort.objects.get(plz=int(aData['data']['wohnortMutter']['plz']), ort=aData['data']['wohnortMutter']['ort'].strip())
+					except dbmodels.ort.DoesNotExist:
+						aOrt = dbmodels.ort()
+						aOrt.plz = int(aData['data']['wohnortMutter']['plz'])
+						aOrt.ort = aData['data']['wohnortMutter']['ort'].strip()
+						aOrt.save()
+					aSpieler.wohnortMutter = aOrt
+				aSpieler.sprachlichErzogenVater = int(aData['data']['sprachlichErzogenVater'])
+				aSpieler.sprachlichErzogenMutter = int(aData['data']['sprachlichErzogenMutter'])
+				aSpieler.dialektSelbst = True if aData['data']['dialektSelbst'] == 'Ja' else False if aData['data']['dialektSelbst'] == 'Nein' else None
+				if aSpieler.dialektSelbst:
+					aSpieler.dialektSelbstWelcher = aData['data']['dialektSelbstWelcher'].strip()
+					aSpieler.dialektSprechen = int(aData['data']['dialektSprechen'])
+					aSpieler.dialektNutzen = int(aData['data']['dialektNutzen'])
+				aSpieler.hochdeutschSprechen = int(aData['data']['hochdeutschSprechen'])
+				aSpieler.hochdeutschNutzen = int(aData['data']['hochdeutschNutzen'])
+				aSpieler.alltagSprechen = int(aData['data']['alltagSprechen'])
+				aSpieler.bezeichnungSprechweise = aData['data']['bezeichnungSprechweise'].strip()
+				aSpieler.anmerkungen = aData['data']['anmerkungen'].strip()
+			aSpieler.save()
+			return httpOutput(json.dumps({'OK': True, 'playerUuId': str(aSpieler.uuid)}), mimetype='application/json; charset=utf-8')
+		# Speichere Spielrunde
 		if request.POST.get('set') == 'gameRound' and 'playerUuId' in request.POST:
 			aData = json.loads(request.POST.get('data'))  # {'selOrt': 'NEU', 'rundeNr': 0, 'played': 1, 'beispielNr': 0, 'gId': 11, 'sympathie': 3, 'aId': 12}
 			aGame = dbmodels.spiel.objects.get(pk=aData['gId'], spieler__uuid=request.POST.get('playerUuId'))  # Überprüfen ob Spiel mit Spieler existiert
