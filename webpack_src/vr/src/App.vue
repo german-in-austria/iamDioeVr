@@ -33,7 +33,7 @@
 		mounted () {
 			if (this.devMode) {
 				console.log(mediaUrl, gData)
-				this.playerUuId = '2c8dd99b-3b42-48a7-9cd6-df63f5b2122f'
+				// this.playerUuId = '2c8dd99b-3b42-48a7-9cd6-df63f5b2122f'
 			}
 		},
 		methods: {
@@ -41,9 +41,23 @@
 				this.site = ((this.playerUuId) ? 2 : 1)
 			},
 			saveData (data, weitere) {
-				// ToDo: Speichervorgang und playerId vergeben
-				console.log(JSON.stringify(data))
-				console.log(data, weitere)
+				this.$http.post('', {
+					set: 'playerData',
+					data: JSON.stringify({'data': data, 'weitere': weitere})
+				})
+				.then((response) => {
+					if (response.data.playerUuId) {
+						this.playerUuId = response.data.playerUuId
+						this.site = 2
+					} else {
+						console.log(response.data)
+						alert('Fehler! Keine "uuId" erhalten!')
+					}
+				})
+				.catch((err) => {
+					console.log(err)
+					alert('Fehler!')
+				})
 			},
 			saveGameRound (data) {
 				this.$set(data, 'saving', true)

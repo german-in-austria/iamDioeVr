@@ -46,6 +46,9 @@ def start(request):
 def data(request):
 	"""Daten abfragen/setzen durch VUE."""
 	if 'set' in request.POST:
+		if request.POST.get('set') == 'playerData':
+			aData = json.loads(request.POST.get('data'))
+			print(aData)
 		if request.POST.get('set') == 'gameRound' and 'playerUuId' in request.POST:
 			aData = json.loads(request.POST.get('data'))  # {'selOrt': 'NEU', 'rundeNr': 0, 'played': 1, 'beispielNr': 0, 'gId': 11, 'sympathie': 3, 'aId': 12}
 			aGame = dbmodels.spiel.objects.get(pk=aData['gId'], spieler__uuid=request.POST.get('playerUuId'))  # Überprüfen ob Spiel mit Spieler existiert

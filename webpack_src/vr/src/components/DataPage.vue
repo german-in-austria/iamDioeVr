@@ -102,6 +102,8 @@
 
 		<button @click="nextStep()" type="button" class="btn btn-primary w-100" :disabled="errors > 0">Los geht’s</button>
 
+		<div class="loading" v-if="saving">Speichere ...</div>
+
 	</div>
 </template>
 
@@ -115,6 +117,7 @@ export default {
 	data () {
 		return {
 			weitereAngaben: false,
+			saving: false,
 			errors: 0,
 			daten: {
 				geburtsjahr: null,
@@ -250,6 +253,7 @@ export default {
 		nextStep () {
 			if (this.errors === 0) {
 				this.$emit('savedata', JSON.parse(JSON.stringify(this.daten)), this.weitereAngaben)
+				// this.saving = true
 			} else {
 				alert('Das Formular enthält noch Fehler!')
 			}
@@ -285,5 +289,18 @@ export default {
 	.weitereangaben:after {
 		left: inherit;
 		right: -15px;
+	}
+	.loading {
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		padding-top: 40vh;
+		text-align: center;
+		color: #fff;
+		background: #000;
+		background: rgba(0,0,0,0.5);
+		font-size: 60px;
 	}
 </style>
