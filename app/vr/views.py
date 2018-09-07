@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.conf import settings
 import vr.models as dbmodels
-from django.db.models import Sum
+from django.db.models import Sum, Count
 
 import os
 import json
@@ -20,23 +20,23 @@ pOrte = [
 	{'s': 'NEU', 'sf': 'NEU', 't': 'Neumarkt an der Ybbs', 'cy': 605, 'cx': 2168.7},
 	{'s': 'RAG', 'sf': 'RAG', 't': 'Raggal', 'cy': 1107.3, 'cx': 266.8},
 	{'s': 'TAR', 'sf': 'TAR', 't': 'Tarrenz', 'cy': 1079.5, 'cx': 604.8},
-	{'s': 'TAU', 'sf': 'TAU', 't': 'Taufkirchen an der Pram', 'cy': 457.4, 'cx': 1614.2},
+	{'s': 'TAU', 'sf': 'TAU', 't': 'Taufkirchen an der Pram', 'cy': 457.4, 'cx': 1614.2, 'top': True},
 	{'s': 'TUX', 'sf': 'TUX', 't': 'Tux', 'cy': 1137.1, 'cx': 945.4},
 	{'s': 'WEI', 'sf': 'WEI', 't': 'Weißbriach', 'cy': 1387.8, 'cx': 1511.2},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Bregenz', 'cy': 950.4, 'cx': 233.4},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Innsbruck', 'cy': 1077.1, 'cx': 833.2},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Lienz', 'cy': 1312.1, 'cx': 1334.6},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Klagenfurt', 'cy': 1422.4, 'cx': 1896.1},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Salzburg', 'cy': 789.8, 'cx': 1434.7},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Steyrling', 'cy': 787.3, 'cx': 1830.5},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Linz', 'cy': 515.5, 'cx': 1887.9},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Oberwölz', 'cy': 1111.8, 'cx': 1885.4},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Passail', 'cy': 1069.9, 'cx': 2334.6},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Graz', 'cy': 1176.2, 'cx': 2305.9},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Eisenstadt', 'cy': 765.5, 'cx': 2700.1},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Allentsteig', 'cy': 300.6, 'cx': 2267},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'St.Pölten', 'cy': 568.4, 'cx': 2374.5},
-	# {'s': 'XXX', 'sf': 'XXX', 't': 'Wien', 'cy': 571.2, 'cx': 2645.5},
+	{'s': 'BRE', 'sf': 'BRE', 't': 'Bregenz', 'cy': 950.4, 'cx': 233.4},
+	{'s': 'INN', 'sf': 'INN', 't': 'Innsbruck', 'cy': 1077.1, 'cx': 833.2, 'top': True},
+	{'s': 'LIE', 'sf': 'LIE', 't': 'Lienz', 'cy': 1312.1, 'cx': 1334.6},
+	{'s': 'KLA', 'sf': 'KLA', 't': 'Klagenfurt', 'cy': 1422.4, 'cx': 1896.1},
+	{'s': 'SBG', 'sf': 'SBG', 't': 'Salzburg', 'cy': 789.8, 'cx': 1434.7},
+	{'s': 'STY', 'sf': 'STY', 't': 'Steyrling', 'cy': 787.3, 'cx': 1830.5},
+	{'s': 'LIN', 'sf': 'LIN', 't': 'Linz', 'cy': 515.5, 'cx': 1887.9},
+	{'s': 'OWÖ', 'sf': 'OWOE', 't': 'Oberwölz', 'cy': 1111.8, 'cx': 1885.4},
+	{'s': 'PAS', 'sf': 'PAS', 't': 'Passail', 'cy': 1069.9, 'cx': 2334.6},
+	{'s': 'GRA', 'sf': 'GRA', 't': 'Graz', 'cy': 1176.2, 'cx': 2305.9},
+	{'s': 'EIS', 'sf': 'EIS', 't': 'Eisenstadt', 'cy': 765.5, 'cx': 2700.1},
+	{'s': 'ALL', 'sf': 'ALL', 't': 'Allentsteig', 'cy': 300.6, 'cx': 2267},
+	{'s': 'STP', 'sf': 'STP', 't': 'St.Pölten', 'cy': 568.4, 'cx': 2374.5, 'top': True},
+	{'s': 'WIE', 'sf': 'WIE', 't': 'Wien', 'cy': 571.2, 'cx': 2645.5},
 ]
 pAlter = [
 	{'s': 'j', 't': 'jung'},
@@ -188,8 +188,25 @@ def data(request):
 				game['gId'] = aSpiel.pk
 				from random import shuffle
 				# Sätze
-				aSaetze = dbmodels.audiodatei.objects.all().values('satz').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
 				# ToDo: Bereits gespielte Sätze unwarscheinlicher machen!
+				xSaetze = dbmodels.antworten.objects.filter(spiel__spieler__uuid=game['playerUuId']).values('audiodatei__satz').annotate(satz_Count=Count('audiodatei__satz')).order_by('audiodatei__satz')
+				# [{'satz_Count': 2, 'audiodatei__satz': '02'}, {'satz_Count': 1, 'audiodatei__satz': '12'}]
+				xSatzCountMax = 0
+				xSatzCountMin = 99999999
+				for xSatz in xSaetze:
+					if xSatz['satz_Count'] > xSatzCountMax:
+						xSatzCountMax = xSatz['satz_Count']
+					if xSatz['satz_Count'] < xSatzCountMin:
+						xSatzCountMin = xSatz['satz_Count']
+				iSaetze = []
+				if xSatzCountMin != 99999999 and xSatzCountMax > xSatzCountMin:
+					for xSatz in xSaetze:
+						if xSatz['satz_Count'] == xSatzCountMax:
+							iSaetze.append(xSatz['audiodatei__satz'])
+				aSaetze = []
+				for aSatz in dbmodels.audiodatei.objects.all().values('satz').annotate(benutzt=Sum('benutzt')).order_by('benutzt'):
+					if aSatz['satz'] not in iSaetze:
+						aSaetze.append(aSatz)
 				aSaetzeMax = 0
 				for aSatz in aSaetze:
 					if aSatz['benutzt'] > aSaetzeMax:

@@ -29,8 +29,8 @@
 					<g id="svg-layer-marker">
 						<g @click="selectOrt(aOrt.s)" :transform="'translate(' + aOrt.cx + ' ' + aOrt.cy + ')'" :class="((selOrt === aOrt.s) ? ' selected' : '')" v-for="aOrt in gData.orte">
 							<circle :r="((selOrt === aOrt.s) ? 26 : 18)" cx="0" cy="0"/>
-							<text x="0" y="65" text-anchor="middle" style="font-size: 50px; stroke:#fff; stroke-width:4">{{ aOrt.t }}</text>
-							<text x="0" y="65" text-anchor="middle" style="font-size: 50px">{{ aOrt.t }}</text>
+							<text x="0" :y="((aOrt.top) ? -28 : 65)" text-anchor="middle" style="font-size: 50px; stroke:#fff; stroke-width:4">{{ aOrt.t }}</text>
+							<text x="0" :y="((aOrt.top) ? -28 : 65)" text-anchor="middle" style="font-size: 50px">{{ aOrt.t }}</text>
 						</g>
 					</g>
 				</svg>
