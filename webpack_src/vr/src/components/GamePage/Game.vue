@@ -88,7 +88,7 @@
 				if (!nVal) {
 					this.$set(this.saveData, 'data', {})
 					this.beispielNr += 1
-					if (this.beispielNr > 2) {
+					if (this.beispielNr > 5) {
 						this.beispielNr = 0
 						this.rundeNr += 1
 						if (this.rundeNr > 1) {
@@ -210,6 +210,11 @@
 	}
 	#svg-layer-marker > g.selected {
 		fill: #00428a;
+	}
+	#svg-layer-marker > g.selected > circle {
+		fill: #007bff;
+		stroke: #00428a;
+		stroke-width: 3;
 	}
 	#svg-layer-marker > g:hover {
 		fill: #00428a;

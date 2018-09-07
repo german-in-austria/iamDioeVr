@@ -91,6 +91,9 @@
 					this.$set(target.game, 'loading', false)
 					if (this.playerUuId === response.data.playerUuId) {
 						this.$set(target.game, 'ready', true)
+						if (this.devMode) {
+							console.log(JSON.parse(JSON.stringify(response.data)))
+						}
 						this.$set(target.game, 'data', response.data)
 					} else {
 						console.log(response.data)

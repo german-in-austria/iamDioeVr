@@ -140,6 +140,8 @@ def data(request):
 			if aAntwort.audiodatei.ort == aAntwort.gewOrt:
 				aAntwort.correct = True
 			aAntwort.save()
+			aAntwort.audiodatei.benutzt += 1
+			aAntwort.audiodatei.save()
 			return httpOutput(json.dumps({'OK': True, 'playerUuId': request.POST.get('playerUuId')}), mimetype='application/json; charset=utf-8')
 	if 'get' in request.POST:
 		if request.POST.get('get') == 'gameData' and 'playerUuId' in request.POST:
@@ -161,7 +163,14 @@ def data(request):
 						aSaetzeMax = aSatz['benutzt']
 				uSatz = weighted_choice([x['satz'] for x in aSaetze], [aSaetzeMax - x['benutzt'] + 1 for x in aSaetze])
 				# Orte
-				aOrte = dbmodels.audiodatei.objects.filter(satz=uSatz).values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt')
+				aOrte = []
+				for aOrt in dbmodels.audiodatei.objects.filter(satz=uSatz).values('ort').annotate(benutzt=Sum('benutzt')).order_by('benutzt'):
+					useOrt = True
+					for uTyp in ['S', 'D']:
+						if dbmodels.audiodatei.objects.filter(satz=uSatz, ort=aOrt['ort'], typ=uTyp, alter='j').count() < 1 or dbmodels.audiodatei.objects.filter(satz=uSatz, ort=aOrt['ort'], typ=uTyp, alter='a').count() < 1:
+							useOrt = False
+					if useOrt:
+						aOrte.append(aOrt)
 				# ToDo: Bereits gespielte Orte unwarscheinlicher machen!
 				aOrteMax = 0
 				for aOrt in aOrte:
@@ -177,17 +186,30 @@ def data(request):
 				# Spieldaten
 				for uTyp in ['S', 'D']:
 					for uOrt in uOrte:
-						aFiles = []
-						aFilesMax = 0
-						for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt, typ=uTyp).order_by('benutzt')[:10]:
-							# ToDo: Durchschnittswert
-							aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
-							if aFile.benutzt > aFilesMax:
-								aFilesMax = aFile.benutzt
-						uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
-						if uTyp not in game:
-							game[uTyp] = []
-						game[uTyp].append(uFile)
+						for aAlter in pAlter:
+							aFiles = []
+							aFilesMax = 0
+							for aFile in dbmodels.audiodatei.objects.filter(satz=uSatz, ort=uOrt, typ=uTyp, alter=aAlter['s']).order_by('benutzt')[:10]:
+								# ToDo: Durchschnittswert hinzufügen
+								aFiles.append({'pk': aFile.pk, 'file': aFile.file, 'ort': aFile.ort, 'benutzt': aFile.benutzt})
+								if aFile.benutzt > aFilesMax:
+									aFilesMax = aFile.benutzt
+							uFile = weighted_choice(aFiles, [aFilesMax - x['benutzt'] + 1 for x in aFiles])
+							if uTyp not in game:
+								game[uTyp] = []
+							game[uTyp].append(uFile)
+					shuffle(game[uTyp])
+					# Selber Ort nicht hintereinander!
+					lOrt = None
+					for aOrtIdx, aOrt in enumerate(game[uTyp]):
+						if aOrt['ort'] == lOrt:
+							if aOrtIdx < len(game[uTyp]) - 1:
+								lOrt = game[uTyp][aOrtIdx + 1]['ort']
+								game[uTyp][aOrtIdx], game[uTyp][aOrtIdx + 1] = game[uTyp][aOrtIdx + 1], game[uTyp][aOrtIdx]
+							else:
+								game[uTyp][aOrtIdx], game[uTyp][0] = game[uTyp][0], game[uTyp][aOrtIdx]
+						else:
+							lOrt = aOrt['ort']
 					shuffle(uOrte)
 				return httpOutput(json.dumps(game), mimetype='application/json; charset=utf-8')
 	return httpOutput(json.dumps({'error': 'unknown request'}), mimetype='application/json; charset=utf-8')
