@@ -59,6 +59,7 @@
 		name: 'Game',
 		data () {
 			return {
+				devMode: (process.env.NODE_ENV === 'development'),
 				beispielNr: 0,
 				rundeNr: 0,
 				played: 0,
@@ -145,6 +146,13 @@
 		},
 		mounted () {
 			this.$emit('getGameData', this.gameData)
+			if (this.devMode) {
+				this.rundeNr = 1
+				this.beispielNr = 5
+				this.played = 1
+				this.selOrt = 'HÜT'
+				this.sympathie = 3
+			}
 			this.audio = this.$refs.audioplayer
 			this.audio.addEventListener('loadeddata', this.audioLoaded)
 			this.audio.addEventListener('pause', this.audioPlayPause)

@@ -12,25 +12,17 @@
 		<button @click="site = 'spracheinstellung'" type="button" class="btn btn-primary">Nicht mehr spielen (Weiter zu den Ergebnissen)</button>
 	</div>
 
-	<div class="text-center" v-else-if="site === 'spracheinstellung'">
-		<h1>Spracheinstellung</h1>
-		<p>...</p>
-		<br>
-		<button @click="site = 'detailergebnis'" type="button" class="btn btn-primary">Weiter zu den Detailergebnissen</button>
-	</div>
+	<Spracheinstellung @next="site = 'detailergebnis'" v-else-if="site === 'spracheinstellung'"/>
 
-	<div class="text-center" v-else-if="site === 'detailergebnis'">
-		<h1>Detailergebnis</h1>
-		<p>...</p>
-		<br>
-		<button @click="reload" type="button" class="btn btn-primary">Ende</button>
-	</div>
+	<Detailergebnis @next="reload" v-else-if="site === 'detailergebnis'"/>
 
 </template>
 
 <script>
 	import Info from './GamePage/Info'
 	import Game from './GamePage/Game'
+	import Spracheinstellung from './GamePage/Spracheinstellung'
+	import Detailergebnis from './GamePage/Detailergebnis'
 
 	export default {
 		name: 'GamePage',
@@ -59,6 +51,8 @@
 		components: {
 			Info,
 			Game,
+			Spracheinstellung,
+			Detailergebnis,
 		},
 	}
 </script>
