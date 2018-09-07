@@ -3,7 +3,7 @@
 		<div class="content">
 			<StartPage @start="start()" v-if="site === 0"/>
 			<DataPage @savedata="saveData" v-if="site === 1"/>
-			<GamePage @getGameData="getGameData" @saveGameRound="saveGameRound" @savedataSe="savedataSe" v-if="site === 2"/>
+			<GamePage @getGameData="getGameData" @saveGameRound="saveGameRound" @savedataSe="savedataSe" @getAuswertungsData="getAuswertungsData" v-if="site === 2"/>
 		</div>
 	</div>
 </template>
@@ -90,6 +90,33 @@
 				})
 				.catch((err) => {
 					console.log(err)
+					alert('Fehler!')
+				})
+			},
+			getAuswertungsData (target) {
+				this.$set(target, 'auswertung', {})
+				this.$set(target.auswertung, 'ready', false)
+				this.$set(target.auswertung, 'loading', true)
+				this.$http.post('', {
+					get: 'auswertungsData',
+					playerUuId: this.playerUuId,
+				})
+				.then((response) => {
+					this.$set(target.auswertung, 'loading', false)
+					if (this.playerUuId === response.data.playerUuId) {
+						this.$set(target.auswertung, 'ready', true)
+						if (this.devMode) {
+							console.log(JSON.parse(JSON.stringify(response.data)))
+						}
+						this.$set(target.auswertung, 'data', response.data)
+					} else {
+						console.log(response.data)
+						alert('Fehler! "uuId" stimmt nicht überein!')
+					}
+				})
+				.catch((err) => {
+					console.log(err)
+					this.$set(target.auswertung, 'loading', false)
 					alert('Fehler!')
 				})
 			},

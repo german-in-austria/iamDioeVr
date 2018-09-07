@@ -14,7 +14,7 @@
 
 	<Spracheinstellung @next="site = 'detailergebnis'" @savedataSe="savedataSe" v-else-if="site === 'spracheinstellung'"/>
 
-	<Detailergebnis @next="reload" v-else-if="site === 'detailergebnis'"/>
+	<Detailergebnis @getAuswertungsData="getAuswertungsData" @next="reload" v-else-if="site === 'detailergebnis'"/>
 
 </template>
 
@@ -40,6 +40,9 @@
 		methods: {
 			getGameData (target) {
 				this.$emit('getGameData', target)
+			},
+			getAuswertungsData (target) {
+				this.$emit('getAuswertungsData', target)
 			},
 			saveGameRound (data) {
 				this.$emit('saveGameRound', data)

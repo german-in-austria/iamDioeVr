@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+import math
 
 
 class audiodatei(models.Model):
@@ -31,6 +32,19 @@ class antworten(models.Model):
 	gewOrt			= models.CharField(max_length=255	, blank=True, null=True											, verbose_name="gewählter Ort")
 	sympathie		= models.IntegerField(				  blank=True, null=True											, verbose_name="Sympathie (0-6)")
 	correct			= models.BooleanField(default=False																	, verbose_name="Richtige Antwort")
+
+	def save(self, *args, **kwargs):
+		try:
+			aSpieler = self.spiel.spieler
+			aAntw = antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
+			aRichtigeKlasse = None
+			if aAntw > 0:
+				aRichtigeKlasse = math.floor(4.99 / aAntw * antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()) + 1
+			aSpieler.richtigeKlasse = aRichtigeKlasse
+			aSpieler.save()
+		except Exception as e:
+			print(e)
+		super(antworten, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return '{}, {} [{}] {} ({}) - {}'.format(self.runde, self.beispiel, 'X' if self.correct else ' ', self.sympathie, self.zeit, self.audiodatei)
@@ -85,6 +99,8 @@ class spieler(models.Model):
 	dialektUnsympathisch = models.CharField(max_length=255, blank=True, null=True										, verbose_name="Dialekt unsympathisch")
 	dialektUnsympathischWarum = models.CharField(max_length=255, blank=True, null=True									, verbose_name="Warum Dialekt unsympathisch")
 	gehoerteDialekte = models.CharField(max_length=255, blank=True, null=True											, verbose_name="gehörte Dialekte")
+	# Cach
+	richtigeKlasse	= models.IntegerField(				  blank=True, null=True											, verbose_name="Richtig (1 = 0%-20%, 2 = 20%-40%, ...)")
 
 	def __str__(self):
 		return '{} [{}] ({} - {})'.format(self.pk, 'X' if self.weitere else ' ', self.zeit, self.uuid)

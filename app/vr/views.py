@@ -156,6 +156,27 @@ def data(request):
 			aAntwort.audiodatei.save()
 			return httpOutput(json.dumps({'OK': True, 'playerUuId': request.POST.get('playerUuId')}), mimetype='application/json; charset=utf-8')
 	if 'get' in request.POST:
+		# Auswertung
+		if request.POST.get('get') == 'auswertungsData' and 'playerUuId' in request.POST:
+			auswertung = {
+				'playerUuId': request.POST.get('playerUuId')
+			}
+			if auswertung['playerUuId']:
+				aSpieler = dbmodels.spieler.objects.get(uuid=auswertung['playerUuId'])  # Überprüfen ob UuId existiert
+				auswertung['antworten'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
+				auswertung['antwortenRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()
+				auswertung['antwortenDialekt'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D').count()
+				auswertung['antwortenDialektRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D', correct=True).count()
+				auswertung['antwortenStandard'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S').count()
+				auswertung['antwortenStandardRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S', correct=True).count()
+				auswertung['antwortenJung'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j').count()
+				auswertung['antwortenJungRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j', correct=True).count()
+				auswertung['antwortenAlt'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a').count()
+				auswertung['antwortenAltRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a', correct=True).count()
+				auswertung['statistik'] = [dbmodels.spieler.objects.filter(richtigeKlasse=x).count() for x in [1, 2, 3, 4, 5]]
+				auswertung['richtigeKlasse'] = aSpieler.richtigeKlasse
+			return httpOutput(json.dumps(auswertung), mimetype='application/json; charset=utf-8')
+		# Spiel Daten
 		if request.POST.get('get') == 'gameData' and 'playerUuId' in request.POST:
 			game = {
 				'playerUuId': request.POST.get('playerUuId')
