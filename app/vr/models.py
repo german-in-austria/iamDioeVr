@@ -79,6 +79,12 @@ class spieler(models.Model):
 	alltagSprechen = models.IntegerField(				  blank=True, null=True											, verbose_name="Alltag sprechen")
 	bezeichnungSprechweise = models.CharField(max_length=255, blank=True, null=True										, verbose_name="Sprechweise")
 	anmerkungen		= models.CharField(max_length=255	, blank=True, null=True											, verbose_name="Anmerkungen")
+	# Spracheinstellung
+	dialektSympathisch = models.CharField(max_length=255, blank=True, null=True											, verbose_name="Dialekt sympathisch")
+	dialektSympathischWarum = models.CharField(max_length=255, blank=True, null=True									, verbose_name="Warum Dialekt sympathisch")
+	dialektUnsympathisch = models.CharField(max_length=255, blank=True, null=True										, verbose_name="Dialekt unsympathisch")
+	dialektUnsympathischWarum = models.CharField(max_length=255, blank=True, null=True									, verbose_name="Warum Dialekt unsympathisch")
+	gehoerteDialekte = models.CharField(max_length=255, blank=True, null=True											, verbose_name="gehörte Dialekte")
 
 	def __str__(self):
 		return '{} [{}] ({} - {})'.format(self.pk, 'X' if self.weitere else ' ', self.zeit, self.uuid)

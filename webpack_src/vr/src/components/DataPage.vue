@@ -258,7 +258,7 @@ export default {
 		nextStep () {
 			if (this.errors === 0) {
 				this.$emit('savedata', JSON.parse(JSON.stringify(this.daten)), this.weitereAngaben)
-				// this.saving = true
+				this.saving = true
 			} else {
 				alert('Das Formular enthält noch Fehler!')
 			}

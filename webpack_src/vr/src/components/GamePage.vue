@@ -12,7 +12,7 @@
 		<button @click="site = 'spracheinstellung'" type="button" class="btn btn-primary">Nicht mehr spielen (Weiter zu den Ergebnissen)</button>
 	</div>
 
-	<Spracheinstellung @next="site = 'detailergebnis'" v-else-if="site === 'spracheinstellung'"/>
+	<Spracheinstellung @next="site = 'detailergebnis'" @savedataSe="savedataSe" v-else-if="site === 'spracheinstellung'"/>
 
 	<Detailergebnis @next="reload" v-else-if="site === 'detailergebnis'"/>
 
@@ -46,6 +46,9 @@
 			},
 			reload () {
 				location.reload()
+			},
+			savedataSe (data) {
+				this.$emit('savedataSe', data)
 			}
 		},
 		components: {

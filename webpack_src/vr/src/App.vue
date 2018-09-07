@@ -3,7 +3,7 @@
 		<div class="content">
 			<StartPage @start="start()" v-if="site === 0"/>
 			<DataPage @savedata="saveData" v-if="site === 1"/>
-			<GamePage @getGameData="getGameData" @saveGameRound="saveGameRound" v-if="site === 2"/>
+			<GamePage @getGameData="getGameData" @saveGameRound="saveGameRound" @savedataSe="savedataSe" v-if="site === 2"/>
 		</div>
 	</div>
 </template>
@@ -53,6 +53,20 @@
 						console.log(response.data)
 						alert('Fehler! Keine "uuId" erhalten!')
 					}
+				})
+				.catch((err) => {
+					console.log(err)
+					alert('Fehler!')
+				})
+			},
+			savedataSe (data) {
+				this.$http.post('', {
+					set: 'playerDataSe',
+					playerUuId: this.playerUuId,
+					data: JSON.stringify({'data': data})
+				})
+				.then((response) => {
+					console.log(response.data)
 				})
 				.catch((err) => {
 					console.log(err)

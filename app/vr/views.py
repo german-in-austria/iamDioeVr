@@ -60,6 +60,18 @@ def start(request):
 def data(request):
 	"""Daten abfragen/setzen durch VUE."""
 	if 'set' in request.POST:
+		# Speichere Spracheinstellung
+		if request.POST.get('set') == 'playerDataSe':
+			aData = json.loads(request.POST.get('data'))
+			print(aData)
+			aSpieler = dbmodels.spieler.objects.get(uuid=request.POST.get('playerUuId'))  # Überprüfen ob Spiel mit Spieler existiert
+			aSpieler.dialektSympathisch = aData['data']['dialektSympathisch'].strip()
+			aSpieler.dialektSympathischWarum = aData['data']['dialektSympathischWarum'].strip()
+			aSpieler.dialektUnsympathisch = aData['data']['dialektUnsympathisch'].strip()
+			aSpieler.dialektUnsympathischWarum = aData['data']['dialektUnsympathischWarum'].strip()
+			aSpieler.gehoerteDialekte = aData['data']['gehoerteDialekte'].strip()
+			aSpieler.save()
+			return httpOutput(json.dumps({'OK': True, 'playerUuId': str(aSpieler.uuid)}), mimetype='application/json; charset=utf-8')
 		# Speichere Spielerdaten
 		if request.POST.get('set') == 'playerData':
 			aData = json.loads(request.POST.get('data'))
