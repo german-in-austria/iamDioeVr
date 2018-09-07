@@ -3,7 +3,7 @@
 		<h1 class="text-center">Sozialdaten</h1>
 		<br>
 		<div class="alert alert-primary" role="alert">
-			Bevor es losgeht, brauchen wir ein paar Angaben zu Ihrer Person:
+			Bevor es losgeht, brauchen wir ein paar Angaben zu Ihrer Person: <i>(* Pflichtfelder)</i>
 		</div>
 
 		<div class="form-row">
