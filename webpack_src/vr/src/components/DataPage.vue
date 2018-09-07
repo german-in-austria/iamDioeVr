@@ -42,7 +42,7 @@
 			<p>Wir untersuchen, wie Menschen in Österreich Sprache verwenden, über Sprache denken und Sprache wahrnehmen. <b>Ihre Angaben helfen uns, Spracheinstellung in Österreich auszuwerten und besser zu verstehen.</b></p>
 			<p class="mb-0"><b>Weitere Angaben zu Ihnen</b> helfen uns Ihren Beitrag besonders gut in das Gesamtbild einzuordnen.</p>
 		</div>
-		<button @click="weitereAngaben = true; checkErrors()" type="button" class="btn btn-success w-100" v-if="!weitereAngaben">Weitere Angaben machen</button>
+		<button @click="weitereAngaben = true; checkErrors()" type="button" class="btn btn-lg btn-success w-100" v-if="!weitereAngaben">Weitere Angaben machen</button>
 
 		<div class="weitereangaben" v-if="weitereAngaben">
 			<h4>Weitere Angaben: <button @click="weitereAngaben = false" type="button" class="btn btn-warning btn-sm float-right"><span class="d-none d-sm-block">Doch keine weiteren Angaben machen</span><span class="d-block d-sm-none">&times;</span></button></h4>
@@ -194,6 +194,11 @@ export default {
 				},
 			}
 		}
+	},
+	watch: {
+		'weitereAngaben' (nVal) {
+			this.debouncedCheckErrors()
+		},
 	},
 	methods: {
 		checkErrors () {
