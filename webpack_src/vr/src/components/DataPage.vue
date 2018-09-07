@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>Sozialdaten</h1>
+		<h1 class="text-center">Sozialdaten</h1>
 		<br>
 		<div class="alert alert-primary" role="alert">
 			Bevor es losgeht, brauchen wir ein paar Angaben zu Ihrer Person:
@@ -49,8 +49,8 @@
 			<br>
 			<p><b>Wo sind Ihre Eltern aufgewachsen?</b></p>
 			<div class="form-row">
-				<Wohnort v-model="daten.wohnortMutter" class="col-md-6" :error="error.wohnortMutter" :inputClass="((error.wohnortMutter.error) ? ' is-invalid' : ' is-valid')" label="Wohnort Mutter (inkl. Postleitzahl) *"/>
-				<Wohnort v-model="daten.wohnortVater" class="col-md-6" :error="error.wohnortVater" :inputClass="((error.wohnortVater.error) ? ' is-invalid' : ' is-valid')" label="Wohnort Vater (inkl. Postleitzahl) *"/>
+				<Wohnort v-model="daten.wohnortMutter" class="col-md-6" :error="error.wohnortMutter" :inputClass="((error.wohnortMutter.error) ? ' is-invalid' : ' is-valid')" label="Mutter (inkl. Postleitzahl) *"/>
+				<Wohnort v-model="daten.wohnortVater" class="col-md-6" :error="error.wohnortVater" :inputClass="((error.wohnortVater.error) ? ' is-invalid' : ' is-valid')" label="Vater (inkl. Postleitzahl) *"/>
 			</div>
 			<RadioFromTo v-model="daten.sprachlichErzogenMutter" :error="error.sprachlichErzogenMutter" :inputClass="((error.sprachlichErzogenMutter.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
 			<RadioFromTo v-model="daten.sprachlichErzogenVater" :error="error.sprachlichErzogenVater" :inputClass="((error.sprachlichErzogenVater.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>

@@ -6,7 +6,7 @@
 
 	<div class="text-center" v-else-if="site === 'gameEnd'">
 		<h1>Durchgang beendet</h1>
-		<p>...</p>
+		<br>
 		<br>
 		<button @click="site = 'game'" type="button" class="btn btn-success">Noch einmal spielen</button>
 		<button @click="site = 'spracheinstellung'" type="button" class="btn btn-primary">Nicht mehr spielen (Weiter zu den Ergebnissen)</button>

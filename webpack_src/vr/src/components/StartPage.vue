@@ -1,7 +1,7 @@
 <template>
-	<div>
-		<h1>Startseite</h1>
-		<p>...</p>
+	<div class="text-center">
+		<h1>I am DiÖ - Varietäten raten</h1>
+		<br>
 		<button @click="$emit('start')" type="button" class="btn btn-primary">Starten ...</button>
 	</div>
 </template>
