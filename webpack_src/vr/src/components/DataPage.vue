@@ -49,34 +49,36 @@
 			<br>
 			<p><b>Wo sind Ihre Eltern aufgewachsen?</b></p>
 			<div class="form-row">
-				<Wohnort v-model="daten.wohnortVater" :class="'col-md-6' + ((error.wohnortVater.empty) ? ' is-empty' : '')" label="Wohnort Vater (inkl. Postleitzahl)"/>
-				<Wohnort v-model="daten.wohnortMutter" :class="'col-md-6' + ((error.wohnortMutter.empty) ? ' is-empty' : '')" label="Wohnort Mutter (inkl. Postleitzahl)"/>
+				<Wohnort v-model="daten.wohnortMutter" class="col-md-6" :error="error.wohnortMutter" :inputClass="((error.wohnortMutter.error) ? ' is-invalid' : ' is-valid')" label="Wohnort Mutter (inkl. Postleitzahl) *"/>
+				<Wohnort v-model="daten.wohnortVater" class="col-md-6" :error="error.wohnortVater" :inputClass="((error.wohnortVater.error) ? ' is-invalid' : ' is-valid')" label="Wohnort Vater (inkl. Postleitzahl) *"/>
 			</div>
-			<RadioFromTo v-model="daten.sprachlichErzogenVater"  :error="error.sprachlichErzogenVater" :inputClass="((error.sprachlichErzogenVater.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
-			<RadioFromTo v-model="daten.sprachlichErzogenMutter"  :error="error.sprachlichErzogenMutter" :inputClass="((error.sprachlichErzogenMutter.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
+			<RadioFromTo v-model="daten.sprachlichErzogenMutter" :error="error.sprachlichErzogenMutter" :inputClass="((error.sprachlichErzogenMutter.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
+			<RadioFromTo v-model="daten.sprachlichErzogenVater" :error="error.sprachlichErzogenVater" :inputClass="((error.sprachlichErzogenVater.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
 			<div class="form-row">
-				<div :class="'form-group col-md-3' + ((error.dialektSelbst.empty) ? ' is-empty' : '')">
-					<label>Beherrschen Sie selbst einen Dialekt?</label>
+				<div class="form-group col-md-3">
+					<label>Beherrschen Sie selbst einen Dialekt? *</label>
 					<div class="form-control">
 						<div class="form-check form-check-inline" v-for="aCheck in [{val: 'Ja', title: 'Ja', id: 'inputDialektSelbstJa'}, {val: 'Nein', title: 'Nein', id: 'inputDialektSelbstNein'}]">
-							<input v-model="daten.dialektSelbst" class="form-check-input" type="radio" name="inputDialektSelbst" :id="aCheck.id" :value="aCheck.val">
+							<input v-model="daten.dialektSelbst" :class="'form-check-input' + ((error.dialektSelbst.error) ? ' is-invalid' : ' is-valid')" type="radio" name="inputDialektSelbst" :id="aCheck.id" :value="aCheck.val">
 							<label class="form-check-label" :for="aCheck.id">{{ aCheck.title }}</label>
 						</div>
 					</div>
 				</div>
-				<div :class="'form-group col-md-9' + ((error.dialektSelbstWelcher.empty) ? ' is-empty' : '')" v-if="daten.dialektSelbst === 'Ja'">
-					<label for="inputDialektSelbstWelcher">Welchen Dialekt beherrschen Sie?</label>
-					<input v-model="daten.dialektSelbstWelcher" type="text" class="form-control" id="inputDialektSelbstWelcher" placeholder="Dialekt">
+				<div class="form-group col-md-9" v-if="daten.dialektSelbst === 'Ja'">
+					<label for="inputDialektSelbstWelcher">Welchen Dialekt beherrschen Sie? *</label>
+					<input v-model="daten.dialektSelbstWelcher" type="text" :class="'form-control' + ((error.dialektSelbstWelcher.error) ? ' is-invalid' : ' is-valid')" id="inputDialektSelbstWelcher" placeholder="Dialekt">
+					<div class="invalid-tooltip" v-if="error.dialektSelbstWelcher.changed">{{ error.dialektSelbstWelcher.msg }}</div>
 				</div>
 			</div>
-			<RadioFromTo v-model="daten.dialektSprechen" :class="((error.dialektSprechen.empty) ? ' is-empty' : '')" label="Wie gut sprechen Sie diesen Dialekt?" from="gar nicht" to="sehr gut" v-if="daten.dialektSelbst === 'Ja'"/>
-			<RadioFromTo v-model="daten.dialektNutzen" :class="((error.dialektNutzen.empty) ? ' is-empty' : '')" label="Wie häufig sprechen Sie Dialekt?" from="nie" to="immer" v-if="daten.dialektSelbst === 'Ja'"/>
-			<RadioFromTo v-model="daten.hochdeutschSprechen" :class="((error.hochdeutschSprechen.empty) ? ' is-empty' : '')" label="Wie gut sprechen Sie Hochdeutsch?" from="gar nicht" to="sehr gut"/>
-			<RadioFromTo v-model="daten.hochdeutschNutzen" :class="((error.hochdeutschNutzen.empty) ? ' is-empty' : '')" label="Wie häufig sprechen Sie Hochdeutsch?" from="nie" to="immer"/>
-			<RadioFromTo v-model="daten.alltagSprechen" :class="((error.alltagSprechen.empty) ? ' is-empty' : '')" label="Wie sprechen Sie hauptsächlich in Ihrem Alltag?" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
-			<div :class="'form-group' + ((error.bezeichnungSprechweise.empty) ? ' is-empty' : '')" v-if="daten.alltagSprechen > 1 && daten.alltagSprechen < 7">
-				<label for="inputBezeichnungSprechweise">Wie bezeichnen Sie diese Sprechweise, die Sie hauptsächlich in Ihrem Alltag sprechen?</label>
-				<input v-model="daten.bezeichnungSprechweise" type="text" class="form-control" id="inputBezeichnungSprechweise" placeholder="">
+			<RadioFromTo v-model="daten.dialektSprechen" :error="error.dialektSprechen" :inputClass="((error.dialektSprechen.error) ? ' is-invalid' : ' is-valid')" label="Wie gut sprechen Sie diesen Dialekt? *" from="gar nicht" to="sehr gut" v-if="daten.dialektSelbst === 'Ja'"/>
+			<RadioFromTo v-model="daten.dialektNutzen" :error="error.dialektNutzen" :inputClass="((error.dialektNutzen.error) ? ' is-invalid' : ' is-valid')" label="Wie häufig sprechen Sie Dialekt? *" from="nie" to="immer" v-if="daten.dialektSelbst === 'Ja'"/>
+			<RadioFromTo v-model="daten.hochdeutschSprechen" :error="error.hochdeutschSprechen" :inputClass="((error.hochdeutschSprechen.error) ? ' is-invalid' : ' is-valid')" label="Wie gut sprechen Sie Hochdeutsch? *" from="gar nicht" to="sehr gut"/>
+			<RadioFromTo v-model="daten.hochdeutschNutzen" :error="error.hochdeutschNutzen" :inputClass="((error.hochdeutschNutzen.error) ? ' is-invalid' : ' is-valid')" label="Wie häufig sprechen Sie Hochdeutsch? *" from="nie" to="immer"/>
+			<RadioFromTo v-model="daten.alltagSprechen" :error="error.alltagSprechen" :inputClass="((error.alltagSprechen.error) ? ' is-invalid' : ' is-valid')" label="Wie sprechen Sie hauptsächlich in Ihrem Alltag? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
+			<div class="form-group" v-if="daten.alltagSprechen > 1 && daten.alltagSprechen < 7">
+				<label for="inputBezeichnungSprechweise">Wie bezeichnen Sie diese Sprechweise, die Sie hauptsächlich in Ihrem Alltag sprechen? *</label>
+				<input v-model="daten.bezeichnungSprechweise" type="text" :class="'form-control' + ((error.bezeichnungSprechweise.error) ? ' is-invalid' : ' is-valid')" id="inputBezeichnungSprechweise" placeholder="">
+				<div class="invalid-tooltip" v-if="error.bezeichnungSprechweise.changed">{{ error.bezeichnungSprechweise.msg }}</div>
 			</div>
 			<div :class="'form-group' + ((error.anmerkungen.empty) ? ' is-empty' : '')">
 				<label for="inputAnmerkungen">Haben Sie noch Anmerkungen zu diesem Fragebogen?</label>
@@ -180,6 +182,14 @@ export default {
 					msg: 'Bitte geben Sie an mit welchen Sprachen / Dialekten Sie aufgewachsen sind!'
 				},
 				// Weitere Angaben
+				wohnortVater: {
+					check: function (val, weitere) { return (val.ort && val.plz) || !weitere },
+					msg: 'Bitte geben Sie den Wohnort Ihres Vaters mit gültiger Postleitzahl an!'
+				},
+				wohnortMutter: {
+					check: function (val, weitere) { return (val.ort && val.plz) || !weitere },
+					msg: 'Bitte geben Sie den Wohnort Ihrer Mutter mit gültiger Postleitzahl an!'
+				},
 				sprachlichErzogenVater: {
 					check: function (val, weitere) { return val || !weitere },
 					msg: 'Bitte geben Sie an wie Sie von Ihrem Vater sprachlich erzogen wurden!'
@@ -187,6 +197,38 @@ export default {
 				sprachlichErzogenMutter: {
 					check: function (val, weitere) { return val || !weitere },
 					msg: 'Bitte geben Sie an wie Sie von Ihrer Mutter sprachlich erzogen wurden!'
+				},
+				dialektSelbst: {
+					check: function (val, weitere) { return val || !weitere },
+					msg: 'Bitte geben Sie an ob Sie selbst einen Dialekt beherrschen!'
+				},
+				dialektSelbstWelcher: {
+					check: function (val, weitere, daten) { return val || !weitere || daten.dialektSelbst !== 'Ja' },
+					msg: 'Bitte geben Sie an welchen Dialekt Sie beherrschen!'
+				},
+				dialektSprechen: {
+					check: function (val, weitere, daten) { return val || !weitere || daten.dialektSelbst !== 'Ja' },
+					msg: 'Bitte geben Sie an wie gut Sie diesen Diallekt sprechen!'
+				},
+				dialektNutzen: {
+					check: function (val, weitere, daten) { return val || !weitere || daten.dialektSelbst !== 'Ja' },
+					msg: 'Bitte geben Sie an wie häufig Sie diesen Diallekt sprechen!'
+				},
+				hochdeutschSprechen: {
+					check: function (val, weitere) { return val || !weitere },
+					msg: 'Bitte geben Sie an wie gut Sie Hochdeutsch sprechen!'
+				},
+				hochdeutschNutzen: {
+					check: function (val, weitere) { return val || !weitere },
+					msg: 'Bitte geben Sie an wie häufig Sie Hochdeutsch sprechen!'
+				},
+				alltagSprechen: {
+					check: function (val, weitere) { return val || !weitere },
+					msg: 'Bitte geben Sie an wie Sie hauptsächlich in Ihrem Alltag sprechen!'
+				},
+				bezeichnungSprechweise: {
+					check: function (val, weitere, daten) { return val || !weitere || (daten.alltagSprechen < 2 || daten.alltagSprechen > 6) },
+					msg: 'Bitte geben Sie an wie Sie Ihre Sprechweise bezeichnen!'
 				},
 				dsgvo: {
 					check: function (val, weitere) { return val },
@@ -220,7 +262,7 @@ export default {
 			}
 			this.$set(this.error[aKey], 'error', false)
 			if (this.error[aKey].check) {
-				if (!this.error[aKey].check(cVal, this.weitereAngaben)) {
+				if (!this.error[aKey].check(cVal, this.weitereAngaben, this.daten)) {
 					this.$set(this.error[aKey], 'error', true)
 				}
 			}
