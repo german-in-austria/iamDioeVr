@@ -8,31 +8,31 @@
 
 		<div class="form-row">
 			<div class="form-group col-md-6">
-				<label for="inputBeruf">Diesen Dialekt finde ich besonders sympathisch *</label>
-				<input v-model="daten.dialektSympathisch" type="text" :class="'form-control' + ((error.dialektSympathisch.error) ? ' is-invalid' : ' is-valid')" id="inputBeruf" placeholder="Dialekt">
+				<label for="inputDialektSympathisch">Diesen Dialekt finde ich besonders sympathisch *</label>
+				<input v-model="daten.dialektSympathisch" type="text" :class="'form-control' + ((error.dialektSympathisch.error) ? ' is-invalid' : ' is-valid')" id="inputDialektSympathisch" placeholder="Dialekt">
 				<div class="invalid-tooltip" v-if="error.dialektSympathisch.changed">{{ error.dialektSympathisch.msg }}</div>
 			</div>
 			<div class="form-group col-md-6">
-				<label for="inputBeruf">Warum? *</label>
-				<input v-model="daten.dialektSympathischWarum" type="text" :class="'form-control' + ((error.dialektSympathischWarum.error) ? ' is-invalid' : ' is-valid')" id="inputBeruf" placeholder="Weil ...">
+				<label for="inputDialektSympathischWarum">Warum? *</label>
+				<input v-model="daten.dialektSympathischWarum" type="text" :class="'form-control' + ((error.dialektSympathischWarum.error) ? ' is-invalid' : ' is-valid')" id="inputDialektSympathischWarum" placeholder="Weil ...">
 				<div class="invalid-tooltip" v-if="error.dialektSympathischWarum.changed">{{ error.dialektSympathischWarum.msg }}</div>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="form-group col-md-6">
-				<label for="inputBeruf">Diesen Dialekt finde ich überhaupt nicht sympathisch *</label>
-				<input v-model="daten.dialektUnsympathisch" type="text" :class="'form-control' + ((error.dialektUnsympathisch.error) ? ' is-invalid' : ' is-valid')" id="inputBeruf" placeholder="Dialekt">
+				<label for="inputDialektUnsympathisch">Diesen Dialekt finde ich überhaupt nicht sympathisch *</label>
+				<input v-model="daten.dialektUnsympathisch" type="text" :class="'form-control' + ((error.dialektUnsympathisch.error) ? ' is-invalid' : ' is-valid')" id="inputDialektUnsympathisch" placeholder="Dialekt">
 				<div class="invalid-tooltip" v-if="error.dialektUnsympathisch.changed">{{ error.dialektUnsympathisch.msg }}</div>
 			</div>
 			<div class="form-group col-md-6">
-				<label for="inputBeruf">Warum? *</label>
-				<input v-model="daten.dialektUnsympathischWarum" type="text" :class="'form-control' + ((error.dialektUnsympathischWarum.error) ? ' is-invalid' : ' is-valid')" id="inputBeruf" placeholder="Weil ...">
+				<label for="inputDialektUnsympathischWarum">Warum? *</label>
+				<input v-model="daten.dialektUnsympathischWarum" type="text" :class="'form-control' + ((error.dialektUnsympathischWarum.error) ? ' is-invalid' : ' is-valid')" id="inputDialektUnsympathischWarum" placeholder="Weil ...">
 				<div class="invalid-tooltip" v-if="error.dialektUnsympathischWarum.changed">{{ error.dialektUnsympathischWarum.msg }}</div>
 			</div>
 		</div>
 		<div class="form-group" style="position: relative;">
-			<label for="inputSprachenDialekte">Diese(n) Dialekt(e) habe ich in den Sprachbeispielen gehört *</label>
-			<input v-model="daten.gehoerteDialekte" type="text" :class="'form-control' + ((error.gehoerteDialekte.error) ? ' is-invalid' : ' is-valid')" id="inputSprachenDialekte" placeholder="Gehörte Dialekte">
+			<label for="inputGehoerteDialekte">Diese(n) Dialekt(e) habe ich in den Sprachbeispielen gehört *</label>
+			<input v-model="daten.gehoerteDialekte" type="text" :class="'form-control' + ((error.gehoerteDialekte.error) ? ' is-invalid' : ' is-valid')" id="inputGehoerteDialekte" placeholder="Gehörte Dialekte">
 			<div class="invalid-tooltip" v-if="error.gehoerteDialekte.changed">{{ error.gehoerteDialekte.msg }}</div>
 		</div>
 

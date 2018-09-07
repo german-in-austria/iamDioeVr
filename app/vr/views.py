@@ -63,7 +63,6 @@ def data(request):
 		# Speichere Spracheinstellung
 		if request.POST.get('set') == 'playerDataSe':
 			aData = json.loads(request.POST.get('data'))
-			print(aData)
 			aSpieler = dbmodels.spieler.objects.get(uuid=request.POST.get('playerUuId'))  # Überprüfen ob Spiel mit Spieler existiert
 			aSpieler.dialektSympathisch = aData['data']['dialektSympathisch'].strip()
 			aSpieler.dialektSympathischWarum = aData['data']['dialektSympathischWarum'].strip()
