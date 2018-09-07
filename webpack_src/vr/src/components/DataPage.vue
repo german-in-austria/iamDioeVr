@@ -38,11 +38,12 @@
 		</div>
 
 		<div class="alert alert-success" role="alert">
-			<h4>Warum wollen wir das wissen?</h4>
+			<h4 class="mb-3">Warum wollen wir das wissen?</h4>
 			<p>Wir untersuchen, wie Menschen in Österreich Sprache verwenden, über Sprache denken und Sprache wahrnehmen. <b>Ihre Angaben helfen uns, Spracheinstellung in Österreich auszuwerten und besser zu verstehen.</b></p>
 			<p class="mb-0"><b>Weitere Angaben zu Ihnen</b> helfen uns Ihren Beitrag besonders gut in das Gesamtbild einzuordnen.</p>
+			<br>
+			<button @click="weitereAngaben = true; checkErrors()" type="button" class="btn btn-lg btn-success w-100" v-if="!weitereAngaben">Weitere Angaben machen</button>
 		</div>
-		<button @click="weitereAngaben = true; checkErrors()" type="button" class="btn btn-lg btn-success w-100" v-if="!weitereAngaben">Weitere Angaben machen</button>
 
 		<div class="weitereangaben" v-if="weitereAngaben">
 			<h4>Weitere Angaben: <button @click="weitereAngaben = false" type="button" class="btn btn-warning btn-sm float-right"><span class="d-none d-sm-block">Doch keine weiteren Angaben machen</span><span class="d-block d-sm-none">&times;</span></button></h4>
@@ -87,12 +88,12 @@
 		</div>
 
 		<div class="alert alert-primary mt-3" role="alert">
-			<h5 class="text-center mb-0">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h5>
-		</div>
-		<div class="form-group form-check">
-			<input v-model="daten.dsgvo" type="checkbox" :class="'form-check-input' + ((error.dsgvo.error) ? ' is-invalid' : ' is-valid')" id="dsgvoCheck">
-			<label class="form-check-label" for="dsgvoCheck">Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten - wie in der <a href="https://iam.dioe.at/datenschutz/" target="_blank">Datenschutzerklärung</a> beschrieben - vom SFB „Deutsch in Österreich: Variation – Kontakt – Perzeption“ wissenschaftlich ausgewertet werden und im Zuge dessen innerhalb des SFBs verwendet werden. Diese Einwilligung kann ich jederzeit widerrufen.</label>
-			<div class="invalid-tooltip" v-if="error.dsgvo.changed">{{ error.dsgvo.msg }}</div>
+			<h5 class="mb-3">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h5>
+			<div class="form-group form-check bg-white p-3 px-5 mb-2 rounded">
+				<input v-model="daten.dsgvo" type="checkbox" :class="'form-check-input' + ((error.dsgvo.error) ? ' is-invalid' : ' is-valid')" id="dsgvoCheck">
+				<label class="form-check-label" for="dsgvoCheck">Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten - wie in der <a href="https://iam.dioe.at/datenschutz/" target="_blank">Datenschutzerklärung</a> beschrieben - vom SFB „Deutsch in Österreich: Variation – Kontakt – Perzeption“ wissenschaftlich ausgewertet werden und im Zuge dessen innerhalb des SFBs verwendet werden. Diese Einwilligung kann ich jederzeit widerrufen.</label>
+				<div class="invalid-tooltip" v-if="error.dsgvo.changed">{{ error.dsgvo.msg }}</div>
+			</div>
 		</div>
 
 		<div class="alert alert-danger mt-3" role="alert" v-if="errors > 0">
