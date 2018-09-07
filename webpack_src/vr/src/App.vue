@@ -157,6 +157,9 @@
 </script>
 
 <style>
+	html {
+		font-size: 1.1rem;
+	}
 	.content {
 		padding-top: 20px;
 		padding-bottom: 30px;

@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<h1 class="text-center">Sozialdaten</h1>
+		<h1 class="text-center">Bevor es losgeht ...</h1>
 		<br>
 		<div class="alert alert-primary" role="alert">
-			Bevor es losgeht, brauchen wir ein paar Angaben zu Ihrer Person: <i>(* Pflichtfelder)</i>
+			... brauchen wir ein paar Angaben zu Ihrer Person: <i>(* Pflichtfelder)</i>
 		</div>
 
 		<div class="form-row">
@@ -14,7 +14,7 @@
 			</div>
 			<div class="form-group col-sm-8 col-md-4">
 				<label>biologisches Geschlecht *</label>
-				<div :class="'form-control' + ((error.bioGesch.error) ? ' is-invalid' : ' is-valid')">
+				<div :class="'form-control' + ((error.bioGesch.error) ? ' is-invalid' : ' is-valid')" style="height: auto;">
 					<div class="form-check form-check-inline" v-for="aCheck in [{val: 1, title: 'männlich', id: 'srman'}, {val: 2, title: 'weiblich', id: 'srwoman'}, {val: 3, title: 'sonstiges', id: 'srsonst'}]">
 						<input v-model="daten.bioGesch" class="form-check-input" type="radio" name="inputBioGesch" :id="aCheck.id" :value="aCheck.val">
 						<label class="form-check-label" :for="aCheck.id">{{ aCheck.title }}</label>
@@ -88,7 +88,7 @@
 		</div>
 
 		<div class="alert alert-primary mt-3" role="alert">
-			<h5 class="mb-3">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h5>
+			<h4 class="mb-3">Der SFB „Deutsch in Österreich“ behandelt Ihre Daten vertraulich und ausschließlich für wissenschaftliche Zwecke.</h4>
 			<div class="form-group form-check bg-white p-3 px-5 mb-2 rounded">
 				<input v-model="daten.dsgvo" type="checkbox" :class="'form-check-input' + ((error.dsgvo.error) ? ' is-invalid' : ' is-valid')" id="dsgvoCheck">
 				<label class="form-check-label" for="dsgvoCheck">Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten - wie in der <a href="https://iam.dioe.at/datenschutz/" target="_blank">Datenschutzerklärung</a> beschrieben - vom SFB „Deutsch in Österreich: Variation – Kontakt – Perzeption“ wissenschaftlich ausgewertet werden und im Zuge dessen innerhalb des SFBs verwendet werden. Diese Einwilligung kann ich jederzeit widerrufen.</label>

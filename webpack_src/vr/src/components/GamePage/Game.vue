@@ -102,6 +102,7 @@
 					this.selOrt = null
 					this.playing = false
 					this.audioReload = true
+					window.scrollTo(0, 0)
 				}
 			},
 		},
