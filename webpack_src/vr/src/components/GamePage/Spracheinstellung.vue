@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 class="text-center">Spracheinstellung</h1>
+		<h1 class="text-center">3 letzte Fragen</h1>
 		<br>
 		<div class="alert alert-primary" role="alert">
 			Bevor es zu den Ergebnissen geht, haben wir noch 3 letzte Fragen an Sie:
@@ -14,8 +14,7 @@
 			</div>
 			<div class="form-group col-md-6">
 				<label for="inputDialektSympathischWarum">Warum? *</label>
-				<input v-model="daten.dialektSympathischWarum" type="text" :class="'form-control' + ((error.dialektSympathischWarum.error) ? ' is-invalid' : ' is-valid')" id="inputDialektSympathischWarum" placeholder="Weil ...">
-				<div class="invalid-tooltip" v-if="error.dialektSympathischWarum.changed">{{ error.dialektSympathischWarum.msg }}</div>
+				<input v-model="daten.dialektSympathischWarum" type="text" class="form-control" id="inputDialektSympathischWarum" placeholder="Weil ...">
 			</div>
 		</div>
 		<div class="form-row">
@@ -26,8 +25,7 @@
 			</div>
 			<div class="form-group col-md-6">
 				<label for="inputDialektUnsympathischWarum">Warum? *</label>
-				<input v-model="daten.dialektUnsympathischWarum" type="text" :class="'form-control' + ((error.dialektUnsympathischWarum.error) ? ' is-invalid' : ' is-valid')" id="inputDialektUnsympathischWarum" placeholder="Weil ...">
-				<div class="invalid-tooltip" v-if="error.dialektUnsympathischWarum.changed">{{ error.dialektUnsympathischWarum.msg }}</div>
+				<input v-model="daten.dialektUnsympathischWarum" type="text" class="form-control" id="inputDialektUnsympathischWarum" placeholder="Weil ...">
 			</div>
 		</div>
 		<div class="form-group" style="position: relative;">
@@ -68,18 +66,18 @@
 						check: function (val) { return val },
 						msg: 'Bitte geben Sie an welchen Dialekt Sie besonders sympathisch fanden!'
 					},
-					dialektSympathischWarum: {
-						check: function (val) { return val },
-						msg: 'Bitte geben Sie an warum Sie diesen Dialekt so sympathisch fanden!'
-					},
+					// dialektSympathischWarum: {
+					// 	check: function (val) { return val },
+					// 	msg: 'Bitte geben Sie an warum Sie diesen Dialekt so sympathisch fanden!'
+					// },
 					dialektUnsympathisch: {
 						check: function (val) { return val },
 						msg: 'Bitte geben Sie an welchen Dialekt Sie besonders unsympathisch fanden!'
 					},
-					dialektUnsympathischWarum: {
-						check: function (val) { return val },
-						msg: 'Bitte geben Sie an warum Sie diesen Dialekt so unsympathisch fanden!'
-					},
+					// dialektUnsympathischWarum: {
+					// 	check: function (val) { return val },
+					// 	msg: 'Bitte geben Sie an warum Sie diesen Dialekt so unsympathisch fanden!'
+					// },
 					gehoerteDialekte: {
 						check: function (val) { return val },
 						msg: 'Bitte geben Sie an welche Dialekte Sie gehört haben!'

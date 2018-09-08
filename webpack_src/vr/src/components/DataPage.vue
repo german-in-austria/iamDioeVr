@@ -15,7 +15,7 @@
 			<div class="form-group col-sm-8 col-md-4">
 				<label>biologisches Geschlecht *</label>
 				<div :class="'form-control' + ((error.bioGesch.error) ? ' is-invalid' : ' is-valid')" style="height: auto;">
-					<div class="form-check form-check-inline" v-for="aCheck in [{val: 1, title: 'männlich', id: 'srman'}, {val: 2, title: 'weiblich', id: 'srwoman'}, {val: 3, title: 'sonstiges', id: 'srsonst'}]">
+					<div class="form-check form-check-inline" v-for="aCheck in [{val: 1, title: 'männlich', id: 'srman'}, {val: 2, title: 'weiblich', id: 'srwoman'}, {val: 3, title: 'andere', id: 'srsonst'}]">
 						<input v-model="daten.bioGesch" class="form-check-input" type="radio" name="inputBioGesch" :id="aCheck.id" :value="aCheck.val">
 						<label class="form-check-label" :for="aCheck.id">{{ aCheck.title }}</label>
 					</div>

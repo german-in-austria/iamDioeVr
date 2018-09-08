@@ -15,14 +15,14 @@
 				</svg>
 			</div>
 			<br>
-			<p><b>Standard vs Dialekt</b></p>
-			<p v-if="auswertungsData.auswertung.data.antwortenDialektRichtig === auswertungsData.auswertung.data.antwortenStandardRichtig">Gleichstand</p>
+			<p><b>"Hochdeutsch" vs Dialekt</b></p>
+			<p v-if="auswertungsData.auswertung.data.antwortenDialektRichtig === auswertungsData.auswertung.data.antwortenStandardRichtig">Egal ob "Hochdeutsch" oder Dialekt, Sie erkennen die Sprecherinnen und Sprecher gleich gut.</p>
 			<p v-else>Ihnen fällt es leichter die Sprecherinnen und Sprecher richtig zu zuordnen,<br>
-				wenn diese <b>{{ ((auswertungsData.auswertung.data.antwortenDialektRichtig > auswertungsData.auswertung.data.antwortenStandardRichtig) ? 'Dialekt' : 'Standard') }}</b> sprechen.</p>
-			<p>(<b>{{ auswertungsData.auswertung.data.antwortenStandardRichtig }}</b> Standard richtig zugeordnet)<br>
+				wenn diese <b>{{ ((auswertungsData.auswertung.data.antwortenDialektRichtig > auswertungsData.auswertung.data.antwortenStandardRichtig) ? 'Dialekt' : '"Hochdeutsch"') }}</b> sprechen.</p>
+			<p>(<b>{{ auswertungsData.auswertung.data.antwortenStandardRichtig }}</b> "Hochdeutsch" richtig zugeordnet)<br>
 				(<b>{{ auswertungsData.auswertung.data.antwortenDialektRichtig }}</b> Dialekt richtig zugeornet)</p>
 			<p><b>Jung vs Alt</b></p>
-			<p v-if="auswertungsData.auswertung.data.antwortenJungRichtig === auswertungsData.auswertung.data.antwortenAltRichtig">Gleichstand</p>
+			<p v-if="auswertungsData.auswertung.data.antwortenJungRichtig === auswertungsData.auswertung.data.antwortenAltRichtig">Egal ob jung oder alt, Sie erkennen die Sprecherinnen und Sprecher gleich gut.</p>
 			<p v-else>Es fällt Ihnen leichter <b>{{ ((auswertungsData.auswertung.data.antwortenJungRichtig > auswertungsData.auswertung.data.antwortenAltRichtig) ? 'junge' : 'alte') }}</b> Sprecherinnen und Sprecher richtig zu zuordnen.</p>
 			<p>(<b>{{ auswertungsData.auswertung.data.antwortenJungRichtig }}</b> junge Menschen richtig zugeordnet)<br>
 				(<b>{{ auswertungsData.auswertung.data.antwortenAltRichtig }}</b> alte Menschen richtig zugeordnet)</p>
