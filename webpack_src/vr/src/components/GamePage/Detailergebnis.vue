@@ -11,13 +11,15 @@
 				<svg viewBox="-5 -5 410 210" class="border">
 					<line x1="0" x2="400" :y1="(y - 1) * 18 + 0.5" :y2="(y - 1) * 18 + 0.5" style="stroke: #eee; stroke-width: 0.5;" v-for="y in 11"/>
 					<g :transform="'translate(' + (40 + x * 80) + ' 180)'" v-for="(y, x) in auswertungsData.auswertung.data.statistik">
-						<rect x="-20" width="12" :y="0.5 + -180 / statistikMax.Dr * y.Dr" :height="180 / statistikMax.Dr * y.Dr" :class="'chart' + ((auswertungsData.auswertung.data.richtigeKlasseDr === x + 1) ? ' active' : '')"/>
-						<rect x="-6" width="12" :y="0.5 + -180 / statistikMax.Bl * y.Bl" :height="180 / statistikMax.Bl * y.Bl" :class="'chart' + ((auswertungsData.auswertung.data.richtigeKlasseBl === x + 1) ? ' active' : '')"/>
-						<rect x="8" width="12" :y="0.5 + -180 / statistikMax.Ho * y.Ho" :height="180 / statistikMax.Ho * y.Ho" :class="'chart' + ((auswertungsData.auswertung.data.richtigeKlasse === x + 1) ? ' active' : '')"/>
+						<rect x="-20" width="10" :y="0.5 + -180 / statistikMax.Dr * y.Dr" :height="180 / statistikMax.Dr * y.Dr" :class="'chart chartdr' + ((auswertungsData.auswertung.data.richtigeKlasseDr === x + 1) ? ' active' : '')"/>
+						<rect x="-5" width="10" :y="0.5 + -180 / statistikMax.Bl * y.Bl" :height="180 / statistikMax.Bl * y.Bl" :class="'chart chartbl' + ((auswertungsData.auswertung.data.richtigeKlasseBl === x + 1) ? ' active' : '')"/>
+						<rect x="10" width="10" :y="0.5 + -180 / statistikMax.Ho * y.Ho" :height="180 / statistikMax.Ho * y.Ho" :class="'chart chartho' + ((auswertungsData.auswertung.data.richtigeKlasse === x + 1) ? ' active' : '')"/>
 						<text x="0" y="15" text-anchor="middle" style="font-size: 8px">{{ ['0%-20% richtig', '20%-40% richtig', '40%-60% richtig', '60%-80% richtig', '80%-100% richtig'][x] }}</text>
 					</g>
 				</svg>
 			</div>
+			<br>
+			<p><span class="colbox colboxdr">&nbsp;</span> = Dialektregion, <span class="colbox colboxbl">&nbsp;</span> = Bundesland, <span class="colbox colboxho">&nbsp;</span> = Heimatort<br></p>
 			<br>
 			<p><b>"Hochdeutsch" vs Dialekt</b></p>
 			<p v-if="auswertungsData.auswertung.data.antwortenDialektRichtig === auswertungsData.auswertung.data.antwortenStandardRichtig">Egal ob "Hochdeutsch" oder Dialekt, Sie erkennen die Sprecherinnen und Sprecher gleich gut.</p>
@@ -105,10 +107,30 @@
 		background: rgba(0,0,0,0.5);
 		font-size: 60px;
 	}
-	rect.chart {
+	rect.chartdr {
+		fill: #ffc107;
+	}
+	rect.chartbl {
 		fill: #007bff;
 	}
+	rect.chartho {
+		fill: #28a745;
+	}
 	rect.chart.active {
-		fill: #ffc107;
+		stroke-width: 1;
+		stroke: #dc3545;
+	}
+	.colbox {
+		display: inline-block;
+		width: 26px;
+	}
+	.colboxdr {
+		background: #ffc107;
+	}
+	.colboxbl {
+		background: #007bff;
+	}
+	.colboxho {
+		background: #28a745;
 	}
 </style>
