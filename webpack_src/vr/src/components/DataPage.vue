@@ -56,7 +56,7 @@
 			<RadioFromTo v-model="daten.sprachlichErzogenMutter" :error="error.sprachlichErzogenMutter" :inputClass="((error.sprachlichErzogenMutter.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Mutter sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
 			<RadioFromTo v-model="daten.sprachlichErzogenVater" :error="error.sprachlichErzogenVater" :inputClass="((error.sprachlichErzogenVater.error) ? ' is-invalid' : ' is-valid')" label="Wie wurden Sie von Ihrem Vater sprachlich erzogen? *" from="ausschließlich Dialekt" to="ausschließlich Hochdeutsch"/>
 			<div class="form-row">
-				<div class="form-group col-md-3">
+				<div class="form-group col-md-4">
 					<label>Beherrschen Sie selbst einen Dialekt? *</label>
 					<div class="form-control">
 						<div class="form-check form-check-inline" v-for="aCheck in [{val: 'Ja', title: 'Ja', id: 'inputDialektSelbstJa'}, {val: 'Nein', title: 'Nein', id: 'inputDialektSelbstNein'}]">
@@ -65,7 +65,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group col-md-9" v-if="daten.dialektSelbst === 'Ja'">
+				<div class="form-group col-md-8" v-if="daten.dialektSelbst === 'Ja'">
 					<label for="inputDialektSelbstWelcher">Welchen Dialekt beherrschen Sie? *</label>
 					<input v-model="daten.dialektSelbstWelcher" type="text" :class="'form-control' + ((error.dialektSelbstWelcher.error) ? ' is-invalid' : ' is-valid')" id="inputDialektSelbstWelcher" placeholder="Dialekt">
 					<div class="invalid-tooltip" v-if="error.dialektSelbstWelcher.changed">{{ error.dialektSelbstWelcher.msg }}</div>

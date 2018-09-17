@@ -3,7 +3,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.conf import settings
-import vr.models as dbmodels
 from django.db.models import Sum, Count
 
 import os
@@ -14,29 +13,29 @@ pTypen = [
 	{'s': 'D', 't': 'Dialekt'}
 ]
 pOrte = [
-	{'s': 'GAW', 'sf': 'GAW', 't': 'Gaweinstal', 'cy': 420.4, 'cx': 2725.5},
-	{'s': 'HÜT', 'sf': 'HUET', 't': 'Hüttschlag', 'cy': 1126.2, 'cx': 1503.1},
-	{'s': 'NEC', 'sf': 'NEC', 't': 'Neckenmarkt', 'cy': 896.3, 'cx': 2714.1},
-	{'s': 'NEU', 'sf': 'NEU', 't': 'Neumarkt an der Ybbs', 'cy': 605, 'cx': 2168.7},
-	{'s': 'RAG', 'sf': 'RAG', 't': 'Raggal', 'cy': 1107.3, 'cx': 266.8},
-	{'s': 'TAR', 'sf': 'TAR', 't': 'Tarrenz', 'cy': 1079.5, 'cx': 604.8},
-	{'s': 'TAU', 'sf': 'TAU', 't': 'Taufkirchen an der Pram', 'cy': 457.4, 'cx': 1614.2, 'top': True},
-	{'s': 'TUX', 'sf': 'TUX', 't': 'Tux', 'cy': 1137.1, 'cx': 945.4},
-	{'s': 'WEI', 'sf': 'WEI', 't': 'Weißbriach', 'cy': 1387.8, 'cx': 1511.2},
-	{'s': 'BRE', 'sf': 'BRE', 't': 'Bregenz', 'cy': 950.4, 'cx': 233.4},
-	{'s': 'INN', 'sf': 'INN', 't': 'Innsbruck', 'cy': 1077.1, 'cx': 833.2, 'top': True},
-	{'s': 'LIE', 'sf': 'LIE', 't': 'Lienz', 'cy': 1312.1, 'cx': 1334.6},
-	{'s': 'KLA', 'sf': 'KLA', 't': 'Klagenfurt', 'cy': 1422.4, 'cx': 1896.1},
-	{'s': 'SBG', 'sf': 'SBG', 't': 'Salzburg', 'cy': 789.8, 'cx': 1434.7},
-	{'s': 'STY', 'sf': 'STY', 't': 'Steyrling', 'cy': 787.3, 'cx': 1830.5},
-	{'s': 'LIN', 'sf': 'LIN', 't': 'Linz', 'cy': 515.5, 'cx': 1887.9},
-	{'s': 'OWÖ', 'sf': 'OWOE', 't': 'Oberwölz', 'cy': 1111.8, 'cx': 1885.4},
-	{'s': 'PAS', 'sf': 'PAS', 't': 'Passail', 'cy': 1069.9, 'cx': 2334.6},
-	{'s': 'GRA', 'sf': 'GRA', 't': 'Graz', 'cy': 1176.2, 'cx': 2305.9},
-	{'s': 'EIS', 'sf': 'EIS', 't': 'Eisenstadt', 'cy': 765.5, 'cx': 2700.1},
-	{'s': 'ALL', 'sf': 'ALL', 't': 'Allentsteig', 'cy': 300.6, 'cx': 2267},
-	{'s': 'STP', 'sf': 'STP', 't': 'St.Pölten', 'cy': 568.4, 'cx': 2374.5, 'top': True},
-	{'s': 'WIE', 'sf': 'WIE', 't': 'Wien', 'cy': 571.2, 'cx': 2645.5},
+	{'s': 'GAW', 'sf': 'GAW', 't': 'Gaweinstal', 'bl': 'Niederösterreich', 'dr': 'Ostmittelbairisch', 'cy': 420.4, 'cx': 2725.5},
+	{'s': 'HÜT', 'sf': 'HUET', 't': 'Hüttschlag', 'bl': 'Salzburg', 'dr': 'Südmittelbairisch', 'cy': 1126.2, 'cx': 1503.1},
+	{'s': 'NEC', 'sf': 'NEC', 't': 'Neckenmarkt', 'bl': 'Burgenland', 'dr': 'Südmittelbairisch', 'cy': 896.3, 'cx': 2714.1},
+	{'s': 'NEU', 'sf': 'NEU', 't': 'Neumarkt an der Ybbs', 'bl': 'Niederösterreich', 'dr': 'Ostmittelbairisch', 'cy': 605, 'cx': 2168.7},
+	{'s': 'RAG', 'sf': 'RAG', 't': 'Raggal', 'bl': 'Vorarlberg', 'dr': 'Alemannisch', 'cy': 1107.3, 'cx': 266.8},
+	{'s': 'TAR', 'sf': 'TAR', 't': 'Tarrenz', 'bl': 'Tirol', 'dr': 'Bairisch-Alemannisch', 'cy': 1079.5, 'cx': 604.8},
+	{'s': 'TAU', 'sf': 'TAU', 't': 'Taufkirchen an der Pram', 'bl': 'Oberösterreich', 'dr': 'Ostmittelbairisch', 'cy': 457.4, 'cx': 1614.2, 'top': True},
+	{'s': 'TUX', 'sf': 'TUX', 't': 'Tux', 'bl': 'Tirol', 'dr': 'Südbairisch', 'cy': 1137.1, 'cx': 945.4},
+	{'s': 'WEI', 'sf': 'WEI', 't': 'Weißbriach', 'bl': 'Kärnten', 'dr': 'Südbairisch', 'cy': 1387.8, 'cx': 1511.2},
+	{'s': 'BRE', 'sf': 'BRE', 't': 'Bregenz', 'bl': 'Vorarlberg', 'dr': 'Alemannisch', 'cy': 950.4, 'cx': 233.4},
+	{'s': 'INN', 'sf': 'INN', 't': 'Innsbruck', 'bl': 'Tirol', 'dr': 'Südbairisch', 'cy': 1077.1, 'cx': 833.2, 'top': True},
+	{'s': 'LIE', 'sf': 'LIE', 't': 'Lienz', 'bl': 'Tirol', 'dr': 'Südbairisch', 'cy': 1312.1, 'cx': 1334.6},
+	{'s': 'KLA', 'sf': 'KLA', 't': 'Klagenfurt', 'bl': 'Kärnten', 'dr': 'Südbairisch', 'cy': 1422.4, 'cx': 1896.1},
+	{'s': 'SBG', 'sf': 'SBG', 't': 'Salzburg', 'bl': 'Salzburg', 'dr': 'Südmittelbairisch', 'cy': 789.8, 'cx': 1434.7},
+	{'s': 'STY', 'sf': 'STY', 't': 'Steyrling', 'bl': 'Oberösterreich', 'dr': 'Ostmittelbairisch', 'cy': 787.3, 'cx': 1830.5},
+	{'s': 'LIN', 'sf': 'LIN', 't': 'Linz', 'bl': 'Oberösterreich', 'dr': 'Ostmittelbairisch', 'cy': 515.5, 'cx': 1887.9},
+	{'s': 'OWÖ', 'sf': 'OWOE', 't': 'Oberwölz', 'bl': 'Steiermark', 'dr': 'Südbairisch', 'cy': 1111.8, 'cx': 1885.4},
+	{'s': 'PAS', 'sf': 'PAS', 't': 'Passail', 'bl': 'Steiermark', 'dr': 'Südmittelbairisch', 'cy': 1069.9, 'cx': 2334.6},
+	{'s': 'GRA', 'sf': 'GRA', 't': 'Graz', 'bl': 'Steiermark', 'dr': 'Südmittelbairisch', 'cy': 1176.2, 'cx': 2305.9},
+	{'s': 'EIS', 'sf': 'EIS', 't': 'Eisenstadt', 'bl': 'Burgenland', 'dr': 'Ostmittelbairisch', 'cy': 765.5, 'cx': 2700.1},
+	{'s': 'ALL', 'sf': 'ALL', 't': 'Allentsteig', 'bl': 'Niederösterreich', 'dr': 'Ostmittelbairisch', 'cy': 300.6, 'cx': 2267},
+	{'s': 'STP', 'sf': 'STP', 't': 'St.Pölten', 'bl': 'Niederösterreich', 'dr': 'Ostmittelbairisch', 'cy': 568.4, 'cx': 2374.5, 'top': True},
+	{'s': 'WIE', 'sf': 'WIE', 't': 'Wien', 'bl': 'Wien', 'dr': 'Ostmittelbairisch', 'cy': 571.2, 'cx': 2645.5},
 ]
 pAlter = [
 	{'s': 'j', 't': 'jung'},
@@ -59,6 +58,7 @@ def start(request):
 
 def data(request):
 	"""Daten abfragen/setzen durch VUE."""
+	import vr.models as dbmodels
 	if 'set' in request.POST:
 		# Speichere Spracheinstellung
 		if request.POST.get('set') == 'playerDataSe':
@@ -148,8 +148,21 @@ def data(request):
 			aAntwort.wiedergaben = aData['played']
 			aAntwort.gewOrt = aData['selOrt']
 			aAntwort.sympathie = aData['sympathie']
+			sollOrt = None
+			selOrt = None
+			for d in pOrte:
+				if d['s'] == aAntwort.audiodatei.ort:
+					sollOrt = d
+			for d in pOrte:
+				if d['s'] == aAntwort.gewOrt:
+					selOrt = d
 			if aAntwort.audiodatei.ort == aAntwort.gewOrt:
 				aAntwort.correct = True
+			if sollOrt and selOrt:
+				if selOrt['bl'] == sollOrt['bl']:
+					aAntwort.correctBl = True
+				if selOrt['dr'] == sollOrt['dr']:
+					aAntwort.correctDr = True
 			aAntwort.save()
 			aAntwort.audiodatei.benutzt += 1
 			aAntwort.audiodatei.save()
@@ -164,16 +177,34 @@ def data(request):
 				aSpieler = dbmodels.spieler.objects.get(uuid=auswertung['playerUuId'])  # Überprüfen ob UuId existiert
 				auswertung['antworten'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk).count()
 				auswertung['antwortenRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()
+				auswertung['antwortenRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()
+				auswertung['antwortenRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctDr=True).count()
 				auswertung['antwortenDialekt'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D').count()
 				auswertung['antwortenDialektRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D', correct=True).count()
+				auswertung['antwortenDialektRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D', correctBl=True).count()
+				auswertung['antwortenDialektRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='D', correctDr=True).count()
 				auswertung['antwortenStandard'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S').count()
 				auswertung['antwortenStandardRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S', correct=True).count()
+				auswertung['antwortenStandardRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S', correctBl=True).count()
+				auswertung['antwortenStandardRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__typ='S', correctDr=True).count()
 				auswertung['antwortenJung'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j').count()
 				auswertung['antwortenJungRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j', correct=True).count()
+				auswertung['antwortenJungRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j', correctBl=True).count()
+				auswertung['antwortenJungRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='j', correctDr=True).count()
 				auswertung['antwortenAlt'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a').count()
 				auswertung['antwortenAltRichtig'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a', correct=True).count()
-				auswertung['statistik'] = [dbmodels.spieler.objects.filter(richtigeKlasse=x).count() for x in [1, 2, 3, 4, 5]]
+				auswertung['antwortenAltRichtigBl'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a', correctBl=True).count()
+				auswertung['antwortenAltRichtigDr'] = dbmodels.antworten.objects.filter(spiel__spieler_id=aSpieler.pk, audiodatei__alter='a', correctDr=True).count()
+				auswertung['statistik'] = []
+				for x in [1, 2, 3, 4, 5]:
+					auswertung['statistik'].append({
+						'Ho': dbmodels.spieler.objects.filter(richtigeKlasse=x).count(),
+						'Bl': dbmodels.spieler.objects.filter(richtigeKlasseBl=x).count(),
+						'Dr': dbmodels.spieler.objects.filter(richtigeKlasseDr=x).count()
+					})
 				auswertung['richtigeKlasse'] = aSpieler.richtigeKlasse
+				auswertung['richtigeKlasseBl'] = aSpieler.richtigeKlasseBl
+				auswertung['richtigeKlasseDr'] = aSpieler.richtigeKlasseDr
 			return httpOutput(json.dumps(auswertung), mimetype='application/json; charset=utf-8')
 		# Spiel Daten
 		if request.POST.get('get') == 'gameData' and 'playerUuId' in request.POST:
@@ -266,6 +297,7 @@ def data(request):
 
 def updateaudio(request):
 	"""Audiodateien in Datenbank eintragen."""
+	import vr.models as dbmodels
 	if not request.user.is_authenticated():
 		return httpOutput('Erst einloggen!')
 	files = [f for f in os.listdir(settings.MEDIA_DIR) if os.path.isfile(os.path.join(settings.MEDIA_DIR, f))]

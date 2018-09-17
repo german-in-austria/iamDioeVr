@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 import math
+from vr.views import pOrte
 
 
 class audiodatei(models.Model):
@@ -32,6 +33,8 @@ class antworten(models.Model):
 	gewOrt			= models.CharField(max_length=255	, blank=True, null=True											, verbose_name="gewählter Ort")
 	sympathie		= models.IntegerField(				  blank=True, null=True											, verbose_name="Sympathie (0-6)")
 	correct			= models.BooleanField(default=False																	, verbose_name="Richtige Antwort")
+	correctBl		= models.BooleanField(default=False																	, verbose_name="Richtiges Bundesland")
+	correctDr		= models.BooleanField(default=False																	, verbose_name="Richtiger Dialektraum")
 
 	def save(self, *args, **kwargs):
 		try:
@@ -41,13 +44,21 @@ class antworten(models.Model):
 			if aAntw > 0:
 				aRichtigeKlasse = math.floor(4.99 / aAntw * antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correct=True).count()) + 1
 			aSpieler.richtigeKlasse = aRichtigeKlasse
+			aRichtigeKlasseBl = None
+			if aAntw > 0:
+				aRichtigeKlasseBl = math.floor(4.99 / aAntw * antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctBl=True).count()) + 1
+			aSpieler.richtigeKlasseBl = aRichtigeKlasseBl
+			aRichtigeKlasseDr = None
+			if aAntw > 0:
+				aRichtigeKlasseDr = math.floor(4.99 / aAntw * antworten.objects.filter(spiel__spieler_id=aSpieler.pk, correctDr=True).count()) + 1
+			aSpieler.richtigeKlasseDr = aRichtigeKlasseDr
 			aSpieler.save()
 		except Exception as e:
 			print(e)
 		super(antworten, self).save(*args, **kwargs)
 
 	def __str__(self):
-		return '{}, {} [{}] {} ({}) - {}'.format(self.runde, self.beispiel, 'X' if self.correct else ' ', self.sympathie, self.zeit, self.audiodatei)
+		return '{}, {} [{}] [{}] [{}] {} ({}) - {}'.format(self.runde, self.beispiel, 'X' if self.correct else ' ', 'X' if self.correctBl else ' ', 'X' if self.correctDr else ' ', self.sympathie, self.zeit, self.audiodatei)
 
 	class Meta:
 		verbose_name = "Antwort"
@@ -101,6 +112,8 @@ class spieler(models.Model):
 	gehoerteDialekte = models.CharField(max_length=255, blank=True, null=True											, verbose_name="gehörte Dialekte")
 	# Cach
 	richtigeKlasse	= models.IntegerField(				  blank=True, null=True											, verbose_name="Richtig (1 = 0%-20%, 2 = 20%-40%, ...)")
+	richtigeKlasseBl = models.IntegerField(				  blank=True, null=True											, verbose_name="Richtig Bundesland (1 = 0%-20%, 2 = 20%-40%, ...)")
+	richtigeKlasseDr = models.IntegerField(				  blank=True, null=True											, verbose_name="Richtig Dialektregion (1 = 0%-20%, 2 = 20%-40%, ...)")
 
 	def __str__(self):
 		return '{} [{}] ({} - {})'.format(self.pk, 'X' if self.weitere else ' ', self.zeit, self.uuid)
