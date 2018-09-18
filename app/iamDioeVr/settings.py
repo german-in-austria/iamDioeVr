@@ -33,6 +33,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # IAMDIOEVR_DB_PORT="5433"										(Default: None)										#
 #####################################################################################################################
 
+LOGIN_URL = 'iamdioevr_login'
+LOGOUT_URL = 'iamdioevr_logout'
+LOGIN_REDIRECT_URL = 'evaluation:start'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -61,6 +66,7 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'webpack_loader',
+	'crispy_forms',
 	'vr',
 )
 
@@ -80,7 +86,7 @@ ROOT_URLCONF = 'iamDioeVr.urls'
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [os.path.join(BASE_DIR, 'iamDioeVr', 'templates'), os.path.join(BASE_DIR, 'vr', 'templates')],
+		'DIRS': [os.path.join(BASE_DIR, 'iamDioeVr', 'templates'), os.path.join(BASE_DIR, 'vr', 'templates'), os.path.join(BASE_DIR, 'evaluation', 'templates')],
 		'APP_DIRS': True,
 		'OPTIONS': {
 			'context_processors': [
@@ -151,6 +157,7 @@ if 'IAMDIOEVR_STATIC_URL' in os.environ and os.environ['IAMDIOEVR_STATIC_URL']:
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'iamDioeVr', 'static'),
 	os.path.join(BASE_DIR, 'vr', 'static'),
+	os.path.join(BASE_DIR, 'evaluation', 'static'),
 	os.path.abspath(os.path.join(BASE_DIR, os.pardir, 'webpack_src', 'vr', 'dist')),
 )
 

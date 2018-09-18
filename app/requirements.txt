@@ -1,2 +1,4 @@
 Django==1.8
 django-webpack-loader==0.6
+django-crispy-forms==1.6.0
+xlwt==1.2

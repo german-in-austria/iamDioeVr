@@ -1,0 +1,121 @@
+{% extends 'main/basis.html' %}
+{% load staticfiles %}
+{% load iamDioeVrTags %}
+{% load crispy_forms_tags %}
+{% block title %} - Auswertung{% endblock %}
+{% block ueberschrift %} - Auswertung{% endblock %}
+{% block sitecss %}<link href="{% static "evaluation/css/style.css" %}?{% settings_value "CACH_RANDOM" %}" rel="stylesheet">{% endblock %}
+{% block inhalt %}
+<div style="overflow-x: auto">
+	<a href="{% url 'iamdioevr_logout' %}" class="float-right">Abmelden</a><h1>Auswertung</h1>
+	<br>
+	{% if aAuswertungen %}
+		<b>Treffer: {{ aCount }}</b> - {% if prev > -1 %}<a href="{% url 'evaluation:start' %}?seite={{ prev }}">Zurück</a>{% else %}Zurück{% endif %} - {% if next > -1 %}<a href="{% url 'evaluation:start' %}?seite={{ next }}">Weiter</a>{% else %}Weiter{% endif %} - <a href="{% url 'evaluation:start' %}?get=xls">XLS</a><br>
+		<br>
+		<table class="table table-bordered" style="width: auto; max-width: inherit; min-width: 100%; white-space: nowrap;">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Antworten Id</th>
+					<th>Antworten runde</th>
+					<th>Antworten beispiel</th>
+					<th>Antworten wiedergaben</th>
+					<th>Antworten gewOrt</th>
+					<th>Antworten sympathie</th>
+					<th>Antworten zeit</th>
+					<th>Spiel Id</th>
+					<th>Spiel Zeit</th>
+					<th>Audiodatei Id</th>
+					<th>Audiodatei file</th>
+					<th>Audiodatei typ</th>
+					<th>Audiodatei ort</th>
+					<th>Audiodatei alter</th>
+					<th>Audiodatei satz</th>
+					<th>Audiodatei gpKennzahl</th>
+					<th>Audiodatei benutzt</th>
+					<th>Spieler Id</th>
+					<th>Spieler zeit</th>
+					<th>Spieler geburtsjahr</th>
+					<th>Spieler bioGesch</th>
+					<th>Spieler beruf</th>
+					<th>Spieler wohnort</th>
+					<th>Spieler wohnortLeben</th>
+					<th>Spieler sprachenDialekte</th>
+					<th>Spieler weitere</th>
+					<th>Spieler wohnortVater</th>
+					<th>Spieler wohnortMutter</th>
+					<th>Spieler sprachlichErzogenVater</th>
+					<th>Spieler sprachlichErzogenMutter</th>
+					<th>Spieler dialektSelbst</th>
+					<th>Spieler dialektSelbstWelcher</th>
+					<th>Spieler dialektSprechen</th>
+					<th>Spieler dialektNutzen</th>
+					<th>Spieler hochdeutschSprechen</th>
+					<th>Spieler hochdeutschNutzen</th>
+					<th>Spieler alltagSprechen</th>
+					<th>Spieler bezeichnungSprechweise</th>
+					<th>Spieler anmerkungen</th>
+					<th>Spieler dialektSympathisch</th>
+					<th>Spieler dialektSympathischWarum</th>
+					<th>Spieler dialektUnsympathisch</th>
+					<th>Spieler dialektUnsympathischWarum</th>
+					<th>Spieler gehoerteDialekte</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for auswertung in aAuswertungen %}
+				<tr>
+					<td>{{ auswertung.pk }}</td>
+					<td>{{ auswertung.aNr }}</td>
+					<td>{{ auswertung.model.runde }}</td>
+					<td>{{ auswertung.model.beispiel }}</td>
+					<td>{{ auswertung.model.wiedergaben }}</td>
+					<td>{{ auswertung.model.gewOrt }}</td>
+					<td>{{ auswertung.model.sympathie }}</td>
+					<td>{{ auswertung.model.zeit|date:"c" }}</td>
+					<td>{{ auswertung.model.spiel.pk }}</td>
+					<td>{{ auswertung.model.spiel.zeit|date:"c" }}</td>
+					<td>{{ auswertung.model.audiodatei.pk }}</td>
+					<td>{{ auswertung.model.audiodatei.file }}</td>
+					<td>{{ auswertung.model.audiodatei.typ }}</td>
+					<td>{{ auswertung.model.audiodatei.ort }}</td>
+					<td>{{ auswertung.model.audiodatei.alter }}</td>
+					<td>{{ auswertung.model.audiodatei.satz }}</td>
+					<td>{{ auswertung.model.audiodatei.gpKennzahl }}</td>
+					<td>{{ auswertung.model.audiodatei.benutzt }}</td>
+					<td>{{ auswertung.model.spiel.spieler.pk }}</td>
+					<td>{{ auswertung.model.spiel.spieler.zeit|date:"c" }}</td>
+					<td>{{ auswertung.model.spiel.spieler.geburtsjahr }}</td>
+					<td>{{ auswertung.model.spiel.spieler.bioGesch }}</td>
+					<td>{{ auswertung.model.spiel.spieler.beruf }}</td>
+					<td>{{ auswertung.model.spiel.spieler.wohnort }}</td>
+					<td>{{ auswertung.model.spiel.spieler.wohnortLeben }}</td>
+					<td>{{ auswertung.model.spiel.spieler.sprachenDialekte }}</td>
+					<td>{{ auswertung.model.spiel.spieler.weitere }}</td>
+					<td>{{ auswertung.model.spiel.spieler.wohnortVater }}</td>
+					<td>{{ auswertung.model.spiel.spieler.wohnortMutter }}</td>
+					<td>{{ auswertung.model.spiel.spieler.sprachlichErzogenVater }}</td>
+					<td>{{ auswertung.model.spiel.spieler.sprachlichErzogenMutter }}</td>
+					<td>{{ auswertung.model.spiel.spieler.dialektSelbst }}</td>
+					<td>{{ auswertung.model.spiel.spieler.dialektSelbstWelcher }}</td>
+					<td>{{ auswertung.model.spiel.spieler.dialektSprechen }}</td>
+					<td>{{ auswertung.model.spiel.spieler.dialektNutzen }}</td>
+					<td>{{ auswertung.model.spiel.spieler.hochdeutschSprechen }}</td>
+					<td>{{ auswertung.model.spiel.spieler.hochdeutschNutzen }}</td>
+					<td>{{ auswertung.model.spiel.spieler.alltagSprechen }}</td>
+					<td>{{ auswertung.model.spiel.spieler.bezeichnungSprechweise }}</td>
+					<td>{{ auswertung.model.spiel.spieler.anmerkungen }}</td>
+					<td>{{ auswertung.model.spiel.spieler.dialektSympathisch }}</td>
+					<td>{{ auswertung.model.spiel.spieler.dialektSympathischWarum }}</td>
+					<td>{{ auswertung.model.spiel.spieler.dialektUnsympathisch }}</td>
+					<td>{{ auswertung.model.spiel.spieler.dialektUnsympathischWarum }}</td>
+					<td>{{ auswertung.model.spiel.spieler.gehoerteDialekte }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+</div>
+{% endblock %}
+{% block sitejs %}
+{% endblock %}
