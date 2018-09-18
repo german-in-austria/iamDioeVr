@@ -65,8 +65,8 @@
 			<tbody>
 			{% for auswertung in aAuswertungen %}
 				<tr>
-					<td>{{ auswertung.pk }}</td>
 					<td>{{ auswertung.aNr }}</td>
+					<td>{{ auswertung.model.pk }}</td>
 					<td>{{ auswertung.model.runde }}</td>
 					<td>{{ auswertung.model.beispiel }}</td>
 					<td>{{ auswertung.model.wiedergaben }}</td>
